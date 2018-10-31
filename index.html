@@ -3,82 +3,82 @@
 	<head>
 		<script type="text/javascript">
 			var tracing=0;
-			var tracex,tracey,mousex,mousey;
+			var tracex=new Array(),tracey=new Array(),mousex,mousey;
+			var travx=new Array(),travy=new Array(),trax=new Array(),tray=new Array();
 			function create_trace()
 			{
 				document.getElementById("button_open_trace").style.visibility="hidden";
 				document.getElementById("button_close_trace").style.visibility="visible";
 				tracing=1;
-				var newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra1";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5-10*Math.sqrt(3)+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5-10+"px";
-				newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra2";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5+10*Math.sqrt(3)+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5-10+"px";
-				newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra3";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5+20+"px";newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra4";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5-10*Math.sqrt(3)+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5+10+"px";
-				newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra5";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5+10*Math.sqrt(3)+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5+10+"px";
-				newtra=document.createElement("div");
-				document.getElementById("main").appendChild(newtra);
-				newtra.id="tra6";
-				newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-				newtra.style.left=(tracex=window.event.pageX)-2.5+"px";
-				newtra.style.top=(tracey=window.event.pageY)-2.5-20+"px";
+				var newtra;
+				for(var j=1;j<=3;j++)
+				{
+					for(var i=1;i<=6*j;i++)
+					{
+						newtra=document.createElement("div");
+						document.getElementById("main").appendChild(newtra);
+						newtra.id="tra"+j+"-"+i;
+						newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
+						newtra.style.left=(tracex[j]=window.event.pageX)-2.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
+						newtra.style.top=(tracey[j]=window.event.pageY)-2.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
+					}
+				}
+
+				for(var i=1;i<=20;i++)
+				{
+					newtra=document.createElement("div");
+					document.getElementById("main").appendChild(newtra);
+					newtra.id="trab"+i;
+					newtra.style="position: absolute; background: #88E; height: 10px; width: 10px; border-radius: 5px; z-index: 200;"
+					newtra.style.left=(trax[i]=20*i)-5+"px";
+					newtra.style.top=(tray[i]=20)-5+"px";
+					travx[i]=travy[i]=0;
+				}
+
 				mouse_trace();
 				//setInterval("mouse_trace();",50);
 			}
 			function mouse_trace()
 			{
 				if(tracing==0) return;
-				document.getElementById("tra1").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5-10*Math.sqrt(3)+"px";
-				document.getElementById("tra1").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5-10+"px";
-				document.getElementById("tra2").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5+10*Math.sqrt(3)+"px";
-				document.getElementById("tra2").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5-10+"px";
-				document.getElementById("tra3").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5+"px";
-				document.getElementById("tra3").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5+20+"px";
-				document.getElementById("tra4").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5-10*Math.sqrt(3)+"px";
-				document.getElementById("tra4").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5+10+"px";
-				document.getElementById("tra5").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5+10*Math.sqrt(3)+"px";
-				document.getElementById("tra5").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5+10+"px";
-				document.getElementById("tra6").style.left=(tracex=(mousex*2+tracex*98)/100)-2.5+"px";
-				document.getElementById("tra6").style.top=(tracey=(mousey*2+tracey*98)/100)-2.5-20+"px";
+				for(var j=1;j<=3;j++)
+				{
+					tracex[j]=(mousex*(6-j)+tracex[j]*(94+j))/100;
+					tracey[j]=(mousey*(6-j)+tracey[j]*(94+j))/100;
+					for(var i=1;i<=6*j;i++)
+					{
+						document.getElementById("tra"+j+"-"+i).style.left=tracex[j]-2.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
+						document.getElementById("tra"+j+"-"+i).style.top=tracey[j]-2.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
+					}
+				}
+
+				for(var i=1;i<=20;i++)
+				{
+					var a=10000/(Math.pow(mousex-trax[i],2)+Math.pow(mousey-tray[i],2));
+					if(Math.pow(mousex-trax[i],2)+Math.pow(mousey-tray[i],2)<10000) a=-a;
+					travx[i]+=a*(mousex-trax[i])/Math.sqrt(Math.pow(mousex-trax[i],2)+Math.pow(mousey-tray[i],2));
+					travy[i]+=a*(mousey-tray[i])/Math.sqrt(Math.pow(mousex-trax[i],2)+Math.pow(mousey-tray[i],2));
+					if(trax[i]<0 || trax[i]>document.body.clientWidth) travx[i]=-travx[i];
+					if(tray[i]<0 || tray[i]>2050) travy[i]=-travy[i];//document.documentElement.clientHeight
+					trax[i]+=travx[i];
+					tray[i]+=travy[i];
+					document.getElementById("trab"+i).style.left=trax[i]-5+"px";
+					document.getElementById("trab"+i).style.top=tray[i]-5+"px";
+				}
+				
 				setTimeout("mouse_trace()",10);
 			}
 			function delete_trace()
 			{
 				tracing=0;
-				document.getElementById("main").removeChild(document.getElementById("tra1"));
-				document.getElementById("main").removeChild(document.getElementById("tra2"));
-				document.getElementById("main").removeChild(document.getElementById("tra3"));
-				document.getElementById("main").removeChild(document.getElementById("tra4"));
-				document.getElementById("main").removeChild(document.getElementById("tra5"));
-				document.getElementById("main").removeChild(document.getElementById("tra6"));
+				for(var j=1;j<=3;j++) for(var i=1;i<=6*j;i++) document.getElementById("main").removeChild(document.getElementById("tra"+j+"-"+i));
+				for(var i=1;i<=20;i++) document.getElementById("main").removeChild(document.getElementById("trab"+i));
 				document.getElementById("button_open_trace").style.visibility="visible";
 				document.getElementById("button_close_trace").style.visibility="hidden";
 			}
 		</script>
 	</head>
-	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #CEE;">
+	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #CEE; height: 100%;">
 		<div style="background: #444; position: fixed; top: 0px; left: 0px; height: 50px; width: 100%; z-index: 100;">
 			<button id="button_open_trace" onclick="create_trace();" style="background: #888; position: absolute; right: 25px; top: 12.5px;">开启鼠标追踪</button>
 			<button id="button_close_trace" onclick="delete_trace();" style="background: #888; position: absolute; right: 25px; top: 12.5px; visibility: hidden;">关闭鼠标追踪</button>
