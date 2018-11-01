@@ -79,7 +79,7 @@
 					for(var j=1;j<=20;j++)
 					{
 						if(j==i) continue;
-						var b=0.1/(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
+						var b=0.01/(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
 						if(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2)<10) b=0;
 						travx[i]+=b*(-(trax[i]-trax[j])/10)/Math.sqrt(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
 						travy[i]+=b*(-(tray[i]-tray[j])/10)/Math.sqrt(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
@@ -92,7 +92,7 @@
 					if(tray[i]>2050) tray[i]-=1;
 					trax[i]+=travx[i];
 					tray[i]+=travy[i];
-					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>20) travx[i]*=0.99,travy[i]*=0.99;
+					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>10) travx[i]*=0.98,travy[i]*=0.98;
 					document.getElementById("trab"+i).style.left=trax[i]-5+"px";
 					document.getElementById("trab"+i).style.top=tray[i]-5+"px";
 				}
