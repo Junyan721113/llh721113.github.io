@@ -92,7 +92,7 @@
 					if(tray[i]>2050) tray[i]-=1;
 					trax[i]+=travx[i];
 					tray[i]+=travy[i];
-					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>30) travx[i]*=0.99,travy[i]*=0.99;
+					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>20) travx[i]*=0.99,travy[i]*=0.99;
 					document.getElementById("trab"+i).style.left=trax[i]-5+"px";
 					document.getElementById("trab"+i).style.top=tray[i]-5+"px";
 				}
