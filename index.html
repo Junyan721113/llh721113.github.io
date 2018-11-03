@@ -31,8 +31,8 @@
 				if(tracing==0) return;
 				for(var j=1;j<=3;j++)
 				{
-					tracex[j]=(mousex*(6-j)+tracex[j]*(94+j))/100;
-					tracey[j]=(mousey*(6-j)+tracey[j]*(94+j))/100;
+					tracex[j]=(mousex*(10-j)+tracex[j]*(90+j))/100;
+					tracey[j]=(mousey*(10-j)+tracey[j]*(90+j))/100;
 					for(var i=1;i<=6*j;i++)
 					{
 						document.getElementById("tra"+j+"-"+i).style.left=tracex[j]-2.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
