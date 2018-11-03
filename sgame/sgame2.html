@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>小球打方块</title>
+<style type="text/css">
+body
+{
+	background-color:#EFFFFF;
+}
+</style>
+	<script type="text/javascript">
+	var started=0;
+	var num=20;
+	var bll=new Array();
+	var blr=new Array();
+	var speed=2;
+	var dir=Math.PI*3/4;
+	var bx=300;
+	var by=430;
+	var kl=250;
+	var score=0;
+	var flyint;
+	function getmouseleft()
+	{
+		var e=window.event;
+		return e.clientX;
+	}
+	function move()
+	{
+		if(!(by+10>=450 && by+10<=475 && bx+20>=kl && bx+10<=kl+5) && !(by+10>=450 && by+10<=475 && bx<=kl+200 && bx>=kl+200-5))
+		{
+			kl=getmouseleft()-100-200;
+			document.getElementById("blank").style.left=kl+"px";
+		}
+		if(started==0)
+		{
+			bx=kl+90;
+			document.getElementById("ball").style.left=bx+"px";
+		}
+		return;
+	}
+	function summon()
+	{
+		var x,y;
+		var block;
+		var cal=1;
+		for(var i=1;i<=num;i++)
+		{
+			cal=1;
+			x=Math.round(Math.random()*10000)%15;
+			y=Math.round(Math.random()*10000)%15;
+			block=document.getElementById("b"+i);
+			bll[i]=x*50+25;
+			block.style.left=bll[i]+"px";
+			blr[i]=y*25+25;
+			block.style.top=blr[i]+"px";
+			for(var j=1;j<i;j++)
+			{
+				if(bll[j]==bll[i] && blr[j]==blr[i]) cal++;
+			}
+			block.innerHTML=cal;
+			block.style.visibility="visible";
+		}
+		return;
+	}
+	function fly()
+	{
+		var b=document.getElementById("ball");
+		var k=document.getElementById("blank");
+		var block;
+		if(bx<=0)
+		{
+			dir=Math.PI-dir;
+			bx+=speed;
+		}
+		else if(bx+20>=800)
+		{
+			dir=Math.PI-dir;
+			bx-=speed;
+		}
+		else if(by<=0)
+		{
+			dir=-dir;
+			by+=speed;
+		}
+		else if(by+20>=500) clearInterval(flyint);
+		else if(by+20>=450 && by+20<=455 && bx+10>=kl && bx+10<=kl+200)
+		{
+			dir=-dir;
+			by-=speed;
+		}
+		else if(by+10>=450 && by+10<=475 && bx+20>=kl && bx+10<=kl+5)
+		{
+			dir=Math.PI-dir;
+			bx-=speed;
+		}
+		else if(by+10>=450 && by+10<=475 && bx<=kl+200 && bx>=kl+200-5)
+		{
+			dir=Math.PI-dir;
+			bx+=speed;
+		}
+		//前方高中三角学，慎入！
+		else if(Math.pow(bx+10-(kl+200),2)+Math.pow(by+10-450,2)<=100)//右上角
+		{
+			dir=Math.atan(-1/(((by+10)-450)/((bx+10)-(kl+200))))*2-dir;
+			speedx=Math.cos(dir)*speed;
+			speedy=Math.sin(dir)*speed;
+		}
+		else if(Math.pow(bx+10-kl,2)+Math.pow(by+10-450,2)<=100)//左上角
+		{
+			dir=Math.atan(-1/(((by+10)-450)/((bx+10)-kl)))*2-dir;
+			speedx=Math.cos(dir)*speed;
+			speedy=Math.sin(dir)*speed;
+		}
+		else if(Math.pow(bx+10-(kl+200),2)+Math.pow(by+10-475,2)<=100)//右下角
+		{
+			dir=Math.atan(-1/(((by+10)-475)/((bx+10)-(kl+200))))*2-dir;
+			speedx=Math.cos(dir)*speed;
+			speedy=Math.sin(dir)*speed;
+		}
+		else if(Math.pow(bx+10-kl,2)+Math.pow(by+10-475,2)<=100)//左下角
+		{
+			dir=Math.atan(-1/(((by+10)-475)/((bx+10)-kl)))*2-dir;
+			speedx=Math.cos(dir)*speed;
+			speedy=Math.sin(dir)*speed;
+		}
+		for(var i=num;i>=1;i--)
+		{
+			block=document.getElementById("b"+i);
+			if(block.style.visibility=="hidden") continue;
+			else if(bx>=bll[i]+45 && bx<=bll[i]+50 && by+10>=blr[i] && by+10<=blr[i]+25)
+			{
+				dir=Math.PI-dir;//撞到方块右边
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(bx+20>=bll[i] && bx+20<=bll[i]+5 && by+10>=blr[i] && by+10<=blr[i]+25)
+			{
+				dir=Math.PI-dir;//左边
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(bx+10>=bll[i] && bx+10<=bll[i]+50 && by>=blr[i]+20 && by<=blr[i]+25)
+			{
+				dir=-dir;//上边
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(bx+10>=bll[i] && bx+10<=bll[i]+50 && by+20>=blr[i] && by+20<=blr[i]+5)
+			{
+				dir=-dir;//下边
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(Math.pow(bx+10-(bll[i]+50),2)+Math.pow(by+10-blr[i],2)<=100)//右上角
+			{
+				dir=Math.atan(-1/(((by+10)-blr[i])/((bx+10)-(bll[i]+50))))*2-dir;
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(Math.pow(bx+10-bll[i],2)+Math.pow(by+10-blr[i],2)<=100)//左上角
+			{
+				dir=Math.atan(-1/(((by+10)-blr[i])/((bx+10)-bll[i])))*2-dir;
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(Math.pow(bx+10-(bll[i]+50),2)+Math.pow(by+10-(blr[i]+25),2)<=100)//右下角
+			{
+				dir=Math.atan(-1/(((by+10)-(blr[i]+25))/((bx+10)-(bll[i]+50))))*2-dir;
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+			else if(Math.pow(bx+10-bll[i],2)+Math.pow(by+10-(blr[i]+25),2)<=100)//左下角
+			{
+				dir=Math.atan(-1/(((by+10)-(blr[i]+25))/((bx+10)-bll[i])))*2-dir;
+				block.style.visibility="hidden";
+				score++;
+				document.getElementById("sc").innerHTML=score;
+				break;
+			}
+		}
+		while(dir<0) dir+=2*Math.PI;
+		dir%=2*Math.PI;
+		bx+=Math.cos(dir)*speed;
+		b.style.left=bx+"px";
+		if(Math.sin(dir)*speed>=0 && Math.sin(dir)*speed<=0.5) by++;
+		else if(Math.sin(dir)*speed>=-0.5 && Math.sin(dir)*speed<=0) by--;
+		by+=Math.sin(dir)*speed;
+		b.style.top=by+"px";
+		var f=1;
+		for(var i=1;i<=num;i++)
+		{
+			if(document.getElementById("b"+i).style.visibility=="visible") f=0;
+		}
+		if(f) summon();
+		return;
+	}
+	function create()
+	{
+		for(var i=1;i<=num;i++)
+		{
+			var newblock=document.createElement("div");
+			newblock.id="b"+i;
+			document.getElementById("bg").appendChild(newblock);
+			newblock.style="position: absolute; width: 50px; height: 25px; text-align:center; background: red; visibility: hidden";
+		}
+		summon();
+	}
+	function start()
+	{
+		speedx=Math.cos(dir)*speed;
+		speedy=Math.sin(dir)*speed;
+		document.getElementById("sc").style.visible="visible";
+		document.getElementById("bstart").style.visibility="hidden";
+		document.getElementById("b+").style.visibility="hidden";
+		document.getElementById("sp").style.visibility="hidden";
+		document.getElementById("b-").style.visibility="hidden";
+		document.getElementById("n+").style.visibility="hidden";
+		document.getElementById("nu").style.visibility="hidden";
+		document.getElementById("n-").style.visibility="hidden";
+		started=1;
+		flyint=setInterval("fly();",10);
+		create();
+		return;
+	}//position: absolute很重要！！！
+</script>
+</head>
+<body>
+	<div id="bg" onmousemove="move();" style="position: absolute; top: 100px; left: 200px; height: 500px; width: 800px; background: #FFFF88">
+		<div id="blank" style="position: absolute; top: 450px; left: 250px; height: 25px; width: 200px; background: #880000">
+		</div>
+		<button id="bstart" onclick="start();" style="position: absolute; top: 50px; left: 250px; height: 100px; width: 300px; text-align:center; font-size: 30px; border-radius: 25px; background: #888888";>开始游戏！
+		</button>
+		<p id="sc" style="position: absolute; top: -50px; left: 10px; font-size: 50px; visibility: 'hidden';">0</p>
+		<button id="b-" onclick="speed--;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 250px; top: 200px; width: 100px; height: 50px; background: #CFF;">减慢速度</button>
+		<p id="sp" style="position: absolute; left: 385px; top: 140px; font-size: 50px;">2</p>
+		<button id="b+" onclick="speed++;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 450px; top: 200px; width: 100px; height: 50px; background: #CFF;">增加速度</button>
+		<button id="n-" onclick="num--;document.getElementById('nu').innerHTML=num;" style="position: absolute; left: 250px; top: 280px; width: 100px; height: 50px; background: #CFF;">减少方块数量</button>
+		<p id="nu" style="position: absolute; left: 370px; top: 220px; font-size: 50px;">20</p>
+		<button id="n+" onclick="num++;document.getElementById('nu').innerHTML=num;" style="position: absolute; left: 450px; top: 280px; width: 100px; height: 50px; background: #CFF;">增加方块数量</button>
+		<div id="ball" style="position: absolute; top: 430px; left: 300px; width: 20px; height: 20px; border-radius: 20px; background: blue;"></div>
+		</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>你的手速有多快？</title>
+<style>
+body
+{
+	background-color:#EFFFFF;
+}
+h1
+{
+	color:orange;
+	text-align:center;
+	font-size:50px;
+}
+h2
+{
+	color:#880000;
+	text-align: right;
+	font-size: 20px;
+}
+p
+{
+	font-family:"Times New Roman";
+	font-size:30px;
+}
+button
+{
+	font-size:30px;
+}
+</style>
+<script>
+var speed=1,cnt=0,level=1,started=0;
+function start()
+{
+	if(started) retrun;
+	started=1;
+	setInterval(function(){click()},100);
+	document.getElementById("icnt").innerHTML="点数:"+cnt;
+	document.getElementById("ispeed").innerHTML="生产力："+speed;
+	document.getElementById("ilevel").innerHTML="等级："+level;
+	document.getElementById("bstart").innerHTML="疯狂点击吧！";
+}
+function click()
+{
+	cnt+=speed;
+	document.getElementById("icnt").innerHTML="点数:"+cnt;
+	return;
+}
+function plusspeed()
+{
+	speed+=level;
+	document.getElementById("ispeed").innerHTML="生产力："+speed;
+	return;
+}
+function pluslevel()
+{
+	if(cnt>=Math.pow(2,level-1)*100)
+	{
+		cnt-=Math.pow(2,level-1)*100;
+		level++;
+		document.getElementById("ilevel").innerHTML="等级："+level;
+		document.getElementById("blevel").innerHTML="花"+Math.pow(2,level-1)*100+"个点数升级！";
+	}
+	else document.getElementById("blevel").innerHTML="点数不够"+Math.pow(2,level-1)*100+"！";
+	return;
+}
+</script>
+</head>
+<body>
+<h1>点数生产者V1.01</h1>
+<h2>作者:llh721113 邮箱：2652088766@qq.com</h2>
+<p id=icnt>准备就绪</p>
+<p id=ispeed>准备就绪</p>
+<p id=ilevel>准备就绪</p>
+<button id=bstart type=button onclick="start()">开始！</button>
+<button type=button onclick="plusspeed()">点我！</button>
+<button id=blevel type=button onclick="pluslevel()">花100个点数升级！</button>
+</body>
+</html>
