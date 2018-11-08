@@ -355,6 +355,8 @@ ul.jry_wb_page_system li a:hover:not(.active)
 @keyframes jry_wb_progress_bar_striped{from{background-position:40px 0}to{background-position:0 0}}
 .jry_wb_progress .jry_wb_progress_mouth_move{visibility: hidden;min-width: 30px;width:auto;background-color: #555;color: #fff;text-align: center;border-radius: 6px;padding: 5px 0;position: absolute;z-index: 1;bottom: 125%;opacity: 0;transition: opacity 1s;}
 .jry_wb_progress:hover .jry_wb_progress_mouth_move{visibility: visible;opacity: 1;}
+@-webkit-keyframes jry_wb_rotate_clockwise{from{-webkit-transform: rotate(0deg);}to{-webkit-transform: rotate(360deg);}}
+@-webkit-keyframes jry_wb_rotate_anticlockwise{from{-webkit-transform: rotate(360deg);}to{-webkit-transform: rotate(0deg);}}
 .jry_wb_mouth_on_rotate
 {
 	transition: All 0.4s ease-in-out;
@@ -467,4 +469,3 @@ ul.jry_wb_page_system li a:hover:not(.active)
 	text-decoration: none;
 }
 .jry_wb_word_special_fact{color:#000;z-index:99999;}
-
