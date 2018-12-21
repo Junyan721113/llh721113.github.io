@@ -26,9 +26,9 @@
 						newtra=document.createElement("div");
 						document.getElementById("main").appendChild(newtra);
 						newtra.id="tra"+j+"-"+i;
-						newtra.style="position: absolute; background: #F88; height: 5px; width: 5px; z-index: 200;"
-						newtra.style.left=(tracex[j]=mousex)-2.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
-						newtra.style.top=(tracey[j]=mousey)-2.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
+						newtra.style="position: absolute; background: #F00; height: 3px; width: 3px; z-index: 200;"
+						newtra.style.left=(tracex[j]=mousex)-1.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
+						newtra.style.top=(tracey[j]=mousey)-1.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
 					}
 				}
 				mouse_trace();
@@ -43,8 +43,8 @@
 					tracey[j]=(mousey*(10-j)+tracey[j]*(90+j))/100;
 					for(var i=1;i<=6*j;i++)
 					{
-						document.getElementById("tra"+j+"-"+i).style.left=tracex[j]-2.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
-						document.getElementById("tra"+j+"-"+i).style.top=tracey[j]-2.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
+						document.getElementById("tra"+j+"-"+i).style.left=tracex[j]-1.5-10*j*Math.sin(i*Math.PI/(3*j))+"px";
+						document.getElementById("tra"+j+"-"+i).style.top=tracey[j]-1.5-10*j*Math.cos(i*Math.PI/(3*j))+"px";
 					}
 				}
 				setTimeout("mouse_trace()",10);
@@ -63,14 +63,14 @@
 				document.getElementById("button_close_fly").style.display="inline";
 				flying=1;
 				var newtra;
-				for(var i=1;i<=20;i++)
+				for(var i=1;i<=30;i++)
 				{
 					newtra=document.createElement("div");
 					document.getElementById("main").appendChild(newtra);
 					newtra.id="trab"+i;
-					newtra.style="position: absolute; background: #88E; height: 10px; width: 10px; border-radius: 5px; z-index: 200;"
-					newtra.style.left=(trax[i]=mousex+50*Math.sin(i*Math.PI/10))-5+"px";
-					newtra.style.top=(tray[i]=mousey+50*Math.cos(i*Math.PI/10))-5+"px";
+					newtra.style="position: absolute; background: #088; height: 4px; width: 4px; border-radius: 5px; z-index: 200;"
+					newtra.style.left=(trax[i]=mousex+50*Math.sin(i*Math.PI/15))-2+"px";
+					newtra.style.top=(tray[i]=mousey+50*Math.cos(i*Math.PI/15))-2+"px";
 					travx[i]=travy[i]=0;
 				}
 				mouse_fly();
@@ -78,7 +78,7 @@
 			function mouse_fly()
 			{
 				if(flying==0) return;
-				for(var i=1;i<=20;i++)
+				for(var i=1;i<=30;i++)
 				{
 					var a=30/(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2));
 					if(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2)<50) a=0;
@@ -95,21 +95,21 @@
 					if(trax[i]<0 || trax[i]>document.body.clientWidth) travx[i]=-travx[i];
 					if(trax[i]<0) trax[i]+=1;
 					if(trax[i]>document.body.clientWidth) trax[i]-=1;
-					if(tray[i]<0 || tray[i]>2050) travy[i]=-travy[i];//document.documentElement.clientHeight
+					if(tray[i]<0 || tray[i]>1050) travy[i]=-travy[i];//document.documentElement.clientHeight
 					if(tray[i]<0) tray[i]+=1;
-					if(tray[i]>2050) tray[i]-=1;
+					if(tray[i]>1050) tray[i]-=1;
 					trax[i]+=travx[i];
 					tray[i]+=travy[i];
 					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>10) travx[i]*=0.98,travy[i]*=0.98;
-					document.getElementById("trab"+i).style.left=trax[i]-5+"px";
-					document.getElementById("trab"+i).style.top=tray[i]-5+"px";
+					document.getElementById("trab"+i).style.left=trax[i]-2+"px";
+					document.getElementById("trab"+i).style.top=tray[i]-2+"px";
 				}
 				setTimeout("mouse_fly()",10);
 			}
 			function delete_fly()
 			{
 				flying=0;
-				for(var i=1;i<=20;i++) document.getElementById("main").removeChild(document.getElementById("trab"+i));
+				for(var i=1;i<=30;i++) document.getElementById("main").removeChild(document.getElementById("trab"+i));
 				document.getElementById("button_open_fly").style.display="inline";
 				document.getElementById("button_close_fly").style.display="none";
 			}
@@ -130,13 +130,23 @@
 
 		<div style="position: absolute; top: 50px; left: 0px; height: 1000px; width: 100%;">
 			<div class="panel panel-primary" style="position: absolute; top: 25px; left: 100px; width: 90%;">
-			    <div class="panel-heading" style="font-size: 30px;">
+			    <div class="panel-heading">
 					<h1>你好，我是llh721113，欢迎浏览我的个人网站。</h1>
 					<h1>Hello, I'm llh721113, welcome to my personal website.</h1>
 				</div>
 			</div>
 
 			<div class="panel panel-info" style="position: absolute; top: 200px; left: 100px; width: 90%;">
+				<div class="panel-heading">
+					<h2 class="panel-title" style="font-size: 20px;">最新更新动态：</h2>
+				</div>
+				<div class="panel-body" style="font-size: 25px;">
+					<span class="text-success">鼠标追踪功能开发完毕</span></br>
+					<span class="text-success">粒子特效功能开发完毕</span><span class="text-warning">------警告：可能会引起卡顿</span>
+			    </div>
+			</div>
+
+			<div class="panel panel-info" style="position: absolute; top: 370px; left: 100px; width: 90%;">
 			    <div class="panel-heading">
 			        <h1 class="panel-title" style="font-size: 25px;">我编写的小游戏：</h1>
 			    </div>
