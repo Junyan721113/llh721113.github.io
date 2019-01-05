@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>小游戏</title>
+	<script type="text/javascript">
+		var x=750,y=400,vx=0,vy=0,score=0,num=0,psize=50,nowNTP;
+		var end1=0;
+		var nx=new Array();
+		var ny=new Array();
+		var nvx=new Array();
+		var nvy=new Array();
+		var fl;
+		function fly()
+		{
+			x+=vx;
+			while(x<0) x+=1500;
+			x%=1500;
+			y+=vy;
+			while(y<0) y+=800;
+			y%=800;
+			document.getElementById("player").style.left=x-psize/2+"px";
+			document.getElementById("player").style.top=y-psize/2+"px";
+			for(var i=1;i<=num;i++)
+			{
+				nx[i]+=nvx[i];
+				ny[i]+=nvy[i];
+				document.getElementById("n"+i).style.left=nx[i]-25+"px";
+				document.getElementById("n"+i).style.top=ny[i]-25+"px";
+				if(nx[i]<=0 || nx[i]>=1500) nvx[i]=-nvx[i];
+				if(ny[i]<=0 || ny[i]>=800) nvy[i]=-nvy[i];
+				if(nx[i]+25>=x-psize/2 && nx[i]-25<=x+psize/2 && ny[i]+25>=y-psize/2 && ny[i]-25<=y+psize/2 && ((nowNTP==0 && document.getElementById("n"+i).innerHTML=="A") || (nowNTP==1 && document.getElementById("n"+i).innerHTML=="G") || (nowNTP==2 && document.getElementById("n"+i).innerHTML=="U") || (nowNTP==3 && document.getElementById("n"+i).innerHTML=="C")))
+				{
+					score++;
+					if(score<50)
+					{
+						document.getElementById("prog").innerHTML=score*2+"%";
+						document.getElementById("prog").style.width=score*30+"px";
+					}
+					else end();
+					nowNTP=Math.round(Math.random()*19260817)%4;
+					switch(nowNTP)
+					{
+						case 0 : document.getElementById("pn").innerHTML="A";break;
+						case 1 : document.getElementById("pn").innerHTML="G";break;
+						case 2 : document.getElementById("pn").innerHTML="U";break;
+						case 3 : document.getElementById("pn").innerHTML="C";break;
+					}
+					document.getElementById("player").innerHTML=score;
+					document.getElementById("player").style.width=document.getElementById("player").style.height=(psize=50+score)+"px";
+					document.getElementById("player").style.background=document.getElementById("n"+i).style.background;
+					if(i==num)
+					{
+						document.getElementById("bg").removeChild(document.getElementById("n"+i));
+						num--;
+						continue;
+					}
+					document.getElementById("bg").removeChild(document.getElementById("n"+i));
+					document.getElementById("n"+num).id="n"+i;
+					nx[i]=nx[num];
+					ny[i]=ny[num];
+					nvx[i]=nvx[num];
+					nvy[i]=nvy[num];
+					num--;
+				}
+			}
+		}
+		function summon()
+		{
+			num++;
+			var newNTP=document.createElement("div");
+			document.getElementById("bg").appendChild(newNTP);
+			newNTP.style="position: absolute; width: 50px; height: 50px; border-radius: 10px; background-color: #FFF; font-size: 40px; text-align: center;";
+			var clr=Math.round(Math.random()*19260817)%4;
+			nx[num]=Math.round(Math.random()*19260817)%1500;
+			ny[num]=Math.round(Math.random()*19260817)%800;
+			newNTP.style.left=nx[num]+"px";//.style!
+			newNTP.style.top=ny[num]+"px";
+			nvx[num]=(Math.round(Math.random()*19260817)%5)-3;
+			nvy[num]=(Math.round(Math.random()*19260817)%5)-3;
+			newNTP.id="n"+num;
+			var numa=0,numg=0,numu=0,numc=0;
+			for(var i=1;i<=num;i++)
+			{
+				switch(document.getElementById("n"+i).innerHTML)
+				{
+					case"A":numa++;break;
+					case"G":numg++;break;
+					case"U":numu++;break;
+					case"C":numc++;break;
+				}
+			}
+			if(numc==0) clr=3;
+			if(numu==0) clr=2;
+			if(numg==0) clr=1;
+			if(numa==0) clr=0;
+			switch(clr)
+			{
+				case 0 : newNTP.style.background="#F88";newNTP.innerHTML="A";break;
+				case 1 : newNTP.style.background="#88F";newNTP.innerHTML="G";break;
+				case 2 : newNTP.style.background="#8F8";newNTP.innerHTML="U";break;
+				case 3 : newNTP.style.background="#FF8";newNTP.innerHTML="C";break;
+			}
+			if(!end1) setTimeout("summon();",Math.round(Math.random()*19260817)%2000+Math.sqrt(score)*500);
+		}
+		function move()
+		{
+			var kc=window.event.keyCode;
+			if(kc==38 && y>0 && vy>-5){vy--;}//up
+			else if(kc==37 && x>0 && vx>-5){vx--;}//left
+			else if(kc==39 && x<1500 && vx<5){vx++;}//right
+			else if(kc==40 && y<800 && vy<5){vy++;}//down
+		}
+		function start()
+		{
+			document.getElementById("bstart").style.visibility="hidden";
+			document.getElementById("sn1").style.visibility="hidden";
+			document.getElementById("sn2").style.visibility="hidden";
+			document.getElementById("player").style.visibility="visible";
+			document.getElementById("pn").style.visibility="visible";
+			document.getElementById("prog").style.visibility="visible";
+			fl=setInterval("fly();",10);//""!
+			document.onkeydown=function(){move();};
+			summon();
+			nowNTP=Math.round(Math.random()*19260817)%4;
+			switch(nowNTP)
+			{
+				case 0 : document.getElementById("pn").innerHTML="A";break;
+				case 1 : document.getElementById("pn").innerHTML="G";break;
+				case 2 : document.getElementById("pn").innerHTML="U";break;
+				case 3 : document.getElementById("pn").innerHTML="C";break;
+			}
+		}
+		function end()
+		{
+			end1=1;
+			clearInterval(fl);
+			document.getElementById("sn3").style.visibility="visible";
+		}
+	</script>
+</head>
+<body>
+	<div id="bg" style="position: absolute; top: 0px; height: 0px; width: 1500px; height: 800px; background-color: #EFF;">
+		<p id="sn1" style="position: absolute; width: 1100px; left: 200px; top: 160px; text-align: center; font-size: 40px;">您是刚刚被创造出来的一个ATP分子，请尽力利用周围的分子，拼出能够自我复制的序列！</p>
+		<p id="sn2" style="position: absolute; width: 1300px; left: 100px; top: 260px; text-align: center; font-size: 40px;">请注意，由于地表温度正在逐渐降低，生成新分子的速度正在缓慢降低！</p>
+		<p id="sn3" style="position: absolute; width: 1200px; left: 150px; top: 260px; text-align: center; font-size: 40px; visibility: hidden;">恭喜！您已经拥有了自我复制的能力，现在您是一个最原始的生命了！</p>
+		<button id="bstart" onclick="start();" style="position: absolute; width: 150px; height: 80px; background-color: #F88; left: 675px; top: 360px; border-radius: 50px;">开始游戏！</button>
+		<p id="pn" style="position: absolute; width: 50px; height: 50px; border: solid; border-width: 3px; border-color: #0BB; background-color: #8FF; left: 725px; top: 650px; visibility: hidden; text-align: center; font-size: 40px;"></p>
+		<span id="prog" style="background-color: #F60; position: absolute; width: 0px; height:40px; top: 760px; font-size: 30px; text-align: center; visibility: hidden;">0%</span>
+	</div>
+	<div id="player" style="position: absolute; width: 50px; height: 50px; background-color: #F88; left: 725px; top: 375px; visibility: hidden; border: solid; border-radius: 10px; border-width: 3px; border-color: #080; text-align: center; font-size: 40px;">0</div>
+</body>
+</html>
