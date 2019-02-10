@@ -80,11 +80,11 @@
 				if(flying==0) return;
 				for(var i=1;i<=30;i++)
 				{
-					var a=30/(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2));
-					if(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2)<50) a=0;
+					var a=30/(Math.pow((mousex-trax[i])/30,2)+Math.pow((mousey-tray[i])/30,2));
+					if(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2)<75) a=0;
 					travx[i]+=a*((mousex-trax[i])/10)/Math.sqrt(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2));
 					travy[i]+=a*((mousey-tray[i])/10)/Math.sqrt(Math.pow((mousex-trax[i])/10,2)+Math.pow((mousey-tray[i])/10,2));
-					for(var j=1;j<=20;j++)
+					for(var j=1;j<=30;j++)
 					{
 						if(j==i) continue;
 						var b=0.01/(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
@@ -100,7 +100,7 @@
 					if(tray[i]>1050) tray[i]-=1;
 					trax[i]+=travx[i];
 					tray[i]+=travy[i];
-					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>10) travx[i]*=0.98,travy[i]*=0.98;
+					if(Math.pow(travx[i],2)+Math.pow(travy[i],2)>10) travx[i]*=0.97,travy[i]*=0.97;
 					document.getElementById("trab"+i).style.left=trax[i]-2+"px";
 					document.getElementById("trab"+i).style.top=tray[i]-2+"px";
 				}
