@@ -79,9 +79,9 @@ function mouse_fly()
 			travx[i]+=b*(-(trax[i]-trax[j])/10)/Math.sqrt(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
 			travy[i]+=b*(-(tray[i]-tray[j])/10)/Math.sqrt(Math.pow((trax[i]-trax[j])/10,2)+Math.pow((tray[i]-tray[j])/10,2));
 		}
-		if(trax[i]<0 || trax[i]>document.body.clientWidth) travx[i]=-travx[i];
+		if(trax[i]<0 || trax[i]>document.body.clientWidth-10) travx[i]=-travx[i];
 		if(trax[i]<0) trax[i]+=1;
-		if(trax[i]>document.body.clientWidth) trax[i]-=1;
+		if(trax[i]>document.body.clientWidth-10) trax[i]-=1;
 		if(tray[i]<0 || tray[i]>1050) travy[i]=-travy[i];//document.documentElement.clientHeight
 		if(tray[i]<0) tray[i]+=1;
 		if(tray[i]>1050) tray[i]-=1;
