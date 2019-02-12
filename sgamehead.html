@@ -20,6 +20,11 @@
 	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #DFF; height: 100%;">
 
 		<div style="background: #444; position: fixed; top: 0px; left: 0px; height: 50px; width: 100%; z-index: 100;">
+			<div class="btn-group" style="position: absolute; top: 7.5px; left: 10px;">
+				<button type="button" class="btn btn-primary" onclick="document.getElementById('fgame').src='sgame/sgame.html'">点数生产者</button>
+				<button type="button" class="btn btn-primary" onclick="document.getElementById('fgame').src='sgame/sgame2.html'">小球打方块</button>
+				<button type="button" class="btn btn-primary" onclick="document.getElementById('fgame').src='sgame/sgame3.html'">生命起源</button>
+			</div>
 			<div style="position: absolute; right: 10px; top: 7.5px;">
 				<button type="button" class="btn btn-danger" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
 				<button type="button" class="btn btn-success" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
@@ -44,6 +49,6 @@
 				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
 			</div>
 		</div>
-		<iframe src="sgame/sgame.html" height="85%" width="90%" scrolling="auto" style="position: absolute; top: 75px; left: 100px;"></iframe>
+		<iframe id="fgame" height="85%" width="90%" scrolling="auto" style="position: absolute; top: 75px; left: 100px; z-index: 50;"></iframe>
 	</body>
 </html>
