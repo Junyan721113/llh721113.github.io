@@ -1,26 +1,7 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<!-- 新 Bootstrap 核心 CSS 文件 -->
-		<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-		 
-		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-		 
-		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="fly.js"></script>
-		<style type="text/css">
-			a.sidebtn:hover
-			{
-				background-color: #844;
-			}
-		</style>
-	</head>
-	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #DFF;">
-
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
+	<head></head>
+	<body>
 		<div style="background: #444; position: fixed; top: 0px; left: 0px; height: 50px; width: 100%; z-index: 100;">
 			<div style="position: absolute; right: 10px; top: 7.5px;">
 				<button type="button" class="btn btn-danger" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
@@ -37,7 +18,7 @@
 
 		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 50px; left: 75px; height: 100%; width: 100%; z-index: -100;"></div>
 
-		<div style="background: #444; position: absolute; left: 0px; top: 975px; height: 200px; width: 100%; z-index: 50;">
+		<div style="background: #444; position: absolute; left: 0px; top: 775px; height: 200px; width: 100%; z-index: 50;">
 			<div style="position: absolute; bottom: 75px; right: 25px; height: 100px; width: 100px; background-image: url('img/support.png'); background-size: cover;"></div>
 			<div style="position: absolute; bottom: 25px; right: 25px; height: 40px; width: 500px; font-size: 20px; text-align: right;">
 				<span style="color: #DDD">友情链接：</span>
@@ -45,18 +26,6 @@
 			</div>
 				<div style="position: absolute; bottom: 0px; right: 25px; height: 40px; width: 500px; font-size: 10px; text-align: right;">
 				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
-			</div>
-		</div>
-
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-		<div style="position: relative; top: 50px; margin-left: 75px; height: 875px; width: auto; padding: 25px; z-index: 50;">
-			<iframe id="fgame" height="100%" width="100%" scrolling="auto" style="z-index: 50;"></iframe>
-			<div class="btn-group">
-				<button type="button" class="btn btn-success" style="font-size: 25px;" onclick="document.getElementById('fgame').src='sgame/sgame.html'">点数生产者</button>
-				<button type="button" class="btn btn-success" style="font-size: 25px;" onclick="document.getElementById('fgame').src='sgame/sgame2.html'">小球打方块</button>
-				<button type="button" class="btn btn-success" style="font-size: 25px;" onclick="document.getElementById('fgame').src='sgame/sgame3.html'">生命起源</button>
-				<button type="button" class="btn btn-success" style="font-size: 25px;" onclick="document.getElementById('fgame').src='sgame/sgame4.html'">坦克射击</button>
 			</div>
 		</div>
 	</body>
