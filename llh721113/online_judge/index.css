@@ -10,7 +10,7 @@
 	float:left;
 	transition-duration: 1s;
 }
-.jry_wb_online_judge_all .jry_wb_online_judge_all_left_div .jry_wb_online_judge_one_body				{margin:5px 0px 30px 0px;background-color:#CCCCCC;overflow:hidden;}
+.jry_wb_online_judge_all .jry_wb_online_judge_all_left_div .jry_wb_online_judge_one_body				{margin:5px 0px 30px 0px;background-color:#EEEEEE;overflow:hidden;}
 .jry_wb_online_judge_all .jry_wb_online_judge_all_left_div .jry_wb_online_judge_one_id					{color:#33F;width:200px; border-radius:10px; padding:5px 5px 5px 5px;float:left;margin-top:5px;}
 .jry_wb_online_judge_all .jry_wb_online_judge_all_left_div .jry_wb_online_judge_one_id:link				{color:#33F}
 .jry_wb_online_judge_all .jry_wb_online_judge_all_left_div .jry_wb_online_judge_one_id:visited			{color:#33F}
