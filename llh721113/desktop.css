@@ -54,7 +54,7 @@
 {
 	color:fuchsia;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_picture
+.jry_wb_beautiful_music_body .picture
 {
 	width:100px;
 	height:100px;
@@ -64,7 +64,7 @@
 	border-radius:5px;
 	box-shadow:5px 5px 6px #ABCEDF;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_picture_jiao
+.jry_wb_beautiful_music_body .picture_jiao
 {
 	width:20px;
 	height:20px;
@@ -73,7 +73,7 @@
 	position:absolute;
 	font-size:20px;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_picture_mode
+.jry_wb_beautiful_music_body .picture_mode
 {
 	width:40px;
 	height:20px;
@@ -83,7 +83,7 @@
 	font-size:16px;
 	color:#456789;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls
+.jry_wb_beautiful_music_body .controls
 {
 	width:215px;
 	height:30px;
@@ -91,7 +91,7 @@
 	left:80px;
 	position:absolute;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls .jry_wb_beautiful_music_start_button
+.jry_wb_beautiful_music_body .controls .start_button
 {
 	width:10%;
 	color:#456789;
@@ -99,13 +99,13 @@
 	position:absolute;
 	left:0px;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls .jry_wb_beautiful_music_progress_bar
+.jry_wb_beautiful_music_body .controls .progress_bar
 {
 	position:absolute;
 	float:left;
 	left:10%;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls .jry_wb_beautiful_music_voice_bar
+.jry_wb_beautiful_music_body .controls .voice_bar
 {
 	font-size:15px;
 	max-width:7.5% !important;
@@ -115,7 +115,7 @@
 	top:20px;
 	display:none;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls .jry_beautiful_music_volume_button
+.jry_wb_beautiful_music_body .controls .volume_button
 {
 	width:10%;
 	color:#456789;
@@ -123,7 +123,7 @@
 	position:absolute;
 	left:75%;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_controls .jry_beautiful_music_cycle_button
+.jry_wb_beautiful_music_body .controls .cycle_button
 {
 	width:10%;
 	color:#456789;
@@ -131,7 +131,16 @@
 	position:absolute;
 	left:85%;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_list_area
+.jry_wb_beautiful_music_body .controls .lyric_button
+{
+	width:10%;
+	color:#456789;
+	font-size:20px;
+	position:absolute;
+	left:0;
+	top:20px;
+}
+.jry_wb_beautiful_music_body .list_area
 {
 	position:absolute;
 	top:75px;
@@ -142,7 +151,7 @@
     border-bottom-left-radius: 25px;
 	position:relative;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_list_area .jry_wb_beautiful_music_list_area_song
+.jry_wb_beautiful_music_body .list_area .song
 {
 	width:300px;
     border-bottom-right-radius: 25px;
@@ -151,7 +160,7 @@
 	overflow-y:hidden;
 	overflow-x:hidden;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_list_area .jry_wb_beautiful_music_list_area_song .jry_wb_beautiful_music_list_area_song_one
+.jry_wb_beautiful_music_body .list_area .song .one
 {
 	font-size:25px;
 	color:#456789;
@@ -159,7 +168,29 @@
     width: 280px;
 	height:30px;
 }
-.jry_wb_beautiful_music_body .jry_wb_beautiful_music_list_area .jry_wb_beautiful_music_list_area_song .active
+.jry_wb_beautiful_music_body .list_area .song .active
+{
+	background-color:lightcyan;
+	border-radius:4px;	
+}
+.jry_wb_beautiful_music_body .list_area .lyric
+{
+	width:300px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+	padding-left:10px;
+	overflow-y:hidden;
+	overflow-x:hidden;
+}
+.jry_wb_beautiful_music_body .list_area .lyric .one
+{
+	font-size:25px;
+	color:#456789;
+    overflow-y:hidden;
+    width: 280px;
+	height:30px;
+}
+.jry_wb_beautiful_music_body .list_area .lyric .active
 {
 	background-color:lightcyan;
 	border-radius:4px;	
@@ -684,6 +715,41 @@ input[type=""],input[type="submit"],input[type="reset"]{-moz-appearance: none;-w
 {
 	width:22px;height:22px;
 }
+.jry_wb_show_user_full				{width:75%;border-right:1px solid #000;border-bottom:1px solid #000;}
+.jry_wb_show_user_full td			{border-left:1px solid #000;border-top:1px solid #000;}
+.jry_wb_show_user_full .id			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .id_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .name		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .name_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .head		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .head_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .head_v img	{width:80px;height:80px;}
+.jry_wb_show_user_full .grm			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .grm_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .erd			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .erd_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .cptn		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .cptn_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .sex			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .sex_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .tel			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .tel_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .mail		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .mail_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .use			{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .use_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .zhushi		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .zhushi_v	{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .login		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .login_v		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .login_v .country	{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .login_v .region		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .login_v .isp		{font-size:30px;color:#33F;}
+.jry_wb_show_user_full .login_v .time		{font-size:30px;color:#33F;border-left: 3px solid #33F;}
+.jry_wb_show_user_full .login_v .device		{font-size:30px;color:#33F;border-left: 3px solid #33F;}
+.jry_wb_show_user_full .login_v .browser	{font-size:30px;color:#33F;border-left: 3px solid #33F;}
+.jry_wb_show_user_full .tpin		{font-size:30px;color:#33F;width:250px;}
+.jry_wb_show_user_full .tpin_v		{font-size:30px;color:#33F;}
 .jry_wb_top_toolbar
 {
   overflow: hidden;
