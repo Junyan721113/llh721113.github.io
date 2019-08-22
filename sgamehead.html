@@ -11,46 +11,58 @@
 		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="fly.js"></script>
 		<style type="text/css">
-			a.sidebtn:hover
+			.dropdown
 			{
-				background-color: #844;
+				font-size: 25px;
+			}
+			.dropdown-menu
+			{
+				min-width: 0px;
+				font-size: 25px;
 			}
 		</style>
 	</head>
 	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #DFF;">
-
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-		<div style="background: #444; position: fixed; top: 0px; left: 0px; height: 50px; width: 100%; z-index: 100;">
-			<div style="position: absolute; right: 10px; top: 7.5px;">
-				<button type="button" class="btn btn-danger" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
-				<button type="button" class="btn btn-success" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
-				<button type="button" class="btn btn-danger" id="button_open_fly" onclick="create_fly();" style="display: inline;">开启粒子特效</button>
-				<button type="button" class="btn btn-success" id="button_close_fly" onclick="delete_fly();" style="display: none;">关闭粒子特效</button>
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<div>
+			        <ul class="nav navbar-nav">
+			            <li class="dropdown">
+			                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			                    菜单
+			                    <b class="caret"></b>
+			                </a>
+			                <ul class="dropdown-menu">
+			                    <li><a href="https://llh721113.github.io/index.html">主页</a></li>
+			                    <li class="divider"></li>
+			                    <li><a href="https://llh721113.github.io/sgamehead.html">游戏</a></li>
+			                </ul>
+			            </li>
+			        </ul>
+			    </div>
+				<div style="position: absolute; right: 15px;">
+					<button type="button" class="btn btn-danger navbar-btn" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
+					<button type="button" class="btn btn-success navbar-btn" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
+					<button type="button" class="btn btn-danger navbar-btn" id="button_open_fly" onclick="create_fly();" style="display: inline;">开启粒子特效</button>
+					<button type="button" class="btn btn-success navbar-btn" id="button_close_fly" onclick="delete_fly();" style="display: none;">关闭粒子特效</button>
+				</div>
 			</div>
-		</div>
+		</nav>
 
-		<div style="background: #822; position: fixed; top: 50px; left: 0px; height: 100%; width: 75px; z-index: 100;">
-			<a class="sidebtn" href="https://llh721113.github.io/index.html" style="color: #DDD; position: absolute; top: 0px; left: 0px; width: 75px; padding: 10px; font-size: 25px; text-decoration: none; text-align: center;">主页</a>
-			<a class="sidebtn" href="https://llh721113.github.io/sgamehead.html" style="color: #DDD; position: absolute; top: 55px; left: 0px; width: 75px; padding: 10px; font-size: 25px; text-decoration: none; text-align: center;">游戏</a>
-		</div>
+		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 0px; height: 100%; width: 100%; z-index: -100;"></div>
 
-		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 50px; left: 75px; height: 100%; width: 100%; z-index: -100;"></div>
-
-		<div style="background: #444; position: absolute; left: 0px; top: 975px; height: 200px; width: 100%; z-index: 50;">
+		<div style="background: #444; position: absolute; left: 0px; top: 1000px; height: 200px; width: 100%; z-index: 50;">
 			<div style="position: absolute; bottom: 75px; right: 25px; height: 100px; width: 100px; background-image: url('img/support.png'); background-size: cover;"></div>
 			<div style="position: absolute; bottom: 25px; right: 25px; height: 40px; width: 500px; font-size: 20px; text-align: right;">
 				<span style="color: #DDD">友情链接：</span>
 				<a href="http://juruoyun.top">蒟蒻云</a> <a href="https://www.luogu.org/space/show?uid=58357">洛谷</a> <a href="https://github.com/llh721113/llh721113.github.io">GitHub</a>
 			</div>
-				<div style="position: absolute; bottom: 0px; right: 25px; height: 40px; width: 500px; font-size: 10px; text-align: right;">
+			<div style="position: absolute; bottom: 0px; right: 25px; height: 40px; width: 500px; font-size: 10px; text-align: right;">
 				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
 			</div>
 		</div>
 
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-		<div style="position: relative; top: 50px; margin-left: 75px; height: 875px; width: auto; padding: 25px; z-index: 50;">
+		<div class="container" style="width: auto; height: 875px;">
 			<iframe id="fgame" height="100%" width="100%" scrolling="auto" style="z-index: 50;"></iframe>
 			<div class="btn-group">
 				<button type="button" class="btn btn-success" style="font-size: 25px;" onclick="document.getElementById('fgame').src='sgame/sgame.html'">点数生产者</button>

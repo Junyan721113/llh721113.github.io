@@ -11,31 +11,45 @@
 		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="fly.js"></script>
 		<style type="text/css">
-			a.sidebtn:hover
+			.dropdown
 			{
-				background-color: #844;
+				font-size: 25px;
+			}
+			.dropdown-menu
+			{
+				min-width: 0px;
+				font-size: 25px;
 			}
 		</style>
 	</head>
 	<body id="main" onmousemove="mousex=window.event.pageX;mousey=window.event.pageY;" style="background: #DFF;">
-
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-		<div style="background: #444; position: fixed; top: 0px; left: 0px; height: 50px; width: 100%; z-index: 100;">
-			<div style="position: absolute; right: 10px; top: 7.5px;">
-				<button type="button" class="btn btn-danger" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
-				<button type="button" class="btn btn-success" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
-				<button type="button" class="btn btn-danger" id="button_open_fly" onclick="create_fly();" style="display: inline;">开启粒子特效</button>
-				<button type="button" class="btn btn-success" id="button_close_fly" onclick="delete_fly();" style="display: none;">关闭粒子特效</button>
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<div>
+			        <ul class="nav navbar-nav">
+			            <li class="dropdown">
+			                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+			                    菜单
+			                    <b class="caret"></b>
+			                </a>
+			                <ul class="dropdown-menu">
+			                    <li><a href="https://llh721113.github.io/index.html">主页</a></li>
+			                    <li class="divider"></li>
+			                    <li><a href="https://llh721113.github.io/sgamehead.html">游戏</a></li>
+			                </ul>
+			            </li>
+			        </ul>
+			    </div>
+				<div style="position: absolute; right: 15px;">
+					<button type="button" class="btn btn-danger navbar-btn" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
+					<button type="button" class="btn btn-success navbar-btn" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
+					<button type="button" class="btn btn-danger navbar-btn" id="button_open_fly" onclick="create_fly();" style="display: inline;">开启粒子特效</button>
+					<button type="button" class="btn btn-success navbar-btn" id="button_close_fly" onclick="delete_fly();" style="display: none;">关闭粒子特效</button>
+				</div>
 			</div>
-		</div>
+		</nav>
 
-		<div style="background: #822; position: fixed; top: 50px; left: 0px; height: 100%; width: 75px; z-index: 100;">
-			<a class="sidebtn" href="https://llh721113.github.io/index.html" style="color: #DDD; position: absolute; top: 0px; left: 0px; width: 75px; padding: 10px; font-size: 25px; text-decoration: none; text-align: center;">主页</a>
-			<a class="sidebtn" href="https://llh721113.github.io/sgamehead.html" style="color: #DDD; position: absolute; top: 55px; left: 0px; width: 75px; padding: 10px; font-size: 25px; text-decoration: none; text-align: center;">游戏</a>
-		</div>
-
-		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 50px; left: 75px; height: 100%; width: 100%; z-index: -100;"></div>
+		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 0px; height: 100%; width: 100%; z-index: -100;"></div>
 
 		<div style="background: #444; position: absolute; left: 0px; top: 775px; height: 200px; width: 100%; z-index: 50;">
 			<div style="position: absolute; bottom: 75px; right: 25px; height: 100px; width: 100px; background-image: url('img/support.png'); background-size: cover;"></div>
@@ -47,38 +61,49 @@
 				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
 			</div>
 		</div>
-		
-<!---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
-		<div style="position: relative; top: 50px; margin-left: 75px; height: 725px; width: auto; padding: 25px; z-index: 50;">
-			<div class="panel panel-primary" style="opacity: 0.9;"><!--opacity透明度-->
-			    <div class="panel-heading">
-					<h1>你好，我是llh721113，欢迎浏览我的个人网站。</h1>
-					<h1>Hello, I'm llh721113, welcome to my personal website.</h1>
+		<div class="container" style="width: auto;">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<div class="panel panel-primary" style="opacity: 0.9;"><!--opacity透明度-->
+					    <div class="panel-heading">
+							<h1>你好，我是llh721113，欢迎浏览我的个人网站。</h1>
+							<h1>Hello, I'm llh721113, welcome to my personal website.</h1>
+						</div>
+					</div>
 				</div>
-			</div>
 
-			<div class="panel panel-info" style="opacity: 0.9;">
-				<div class="panel-heading">
-					<h2 class="panel-title" style="font-size: 25px;">最新更新动态：</h2>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<div class="panel panel-info" style="opacity: 0.9;">
+						<div class="panel-heading">
+							<h2 class="panel-title" style="font-size: 25px;">最新更新动态：</h2>
+						</div>
+						<div class="panel-body" style="font-size: 25px;">
+							<span class="text-success">鼠标追踪功能开发完毕</span><br>
+							<span class="text-success">粒子特效功能开发完毕</span><span class="text-warning">------警告：可能会引起卡顿</span><br>
+							<span class="text-success">全分辨率宽度自适应开发完毕</span><br>
+							<span class="text-success">页面排版全新升级</span>
+					    </div>
+					</div>
 				</div>
-				<div class="panel-body" style="font-size: 25px;">
-					<p class="text-success">鼠标追踪功能开发完毕</p>
-					<span class="text-success">粒子特效功能开发完毕</span><p class="text-warning">------警告：可能会引起卡顿</p>
-					<span class="text-success">全分辨率宽度自适应开发完毕</span>
-			    </div>
-			</div>
 
-			<div class="panel panel-info" style="opacity: 0.9;">
-			    <div class="panel-heading">
-			        <h1 class="panel-title" style="font-size: 25px;">我编写的小游戏：</h1>
-			    </div>
-			    <div class="panel-body" style="font-size: 30px;">
-					<span class="text-success">点数生产者</span>
-					<span class="text-success">小球打方块</span>
-					<span class="text-success">生命起源</span>
-					<span class="text-success">坦克射击</span>
-			    </div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<div class="panel panel-info" style="opacity: 0.9;">
+					    <div class="panel-heading">
+					        <h1 class="panel-title" style="font-size: 25px;">我编写的小游戏：</h1>
+					    </div>
+					    <div class="panel-body" style="font-size: 30px;">
+							<span class="text-success">点数生产者</span>
+							<span class="text-success">小球打方块</span>
+							<span class="text-success">生命起源</span>
+							<span class="text-success">坦克射击</span>
+					    </div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					
+				</div>
 			</div>
 		</div>
 	</body>
