@@ -40,7 +40,7 @@
 			            </li>
 			        </ul>
 			    </div>
-				<div style="position: absolute; right: 15px;">
+				<div>
 					<button type="button" class="btn btn-danger navbar-btn" id="button_open_trace" onclick="create_trace();" style="display: inline;">开启鼠标追踪</button>
 					<button type="button" class="btn btn-success navbar-btn" id="button_close_trace" onclick="delete_trace();" style="display: none;">关闭鼠标追踪</button>
 					<button type="button" class="btn btn-danger navbar-btn" id="button_open_fly" onclick="create_fly();" style="display: inline;">开启粒子特效</button>
@@ -48,19 +48,6 @@
 				</div>
 			</div>
 		</nav>
-
-		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 0px; height: 100%; width: 100%; z-index: -100;"></div>
-
-		<div style="background: #444; position: absolute; left: 0px; top: 775px; height: 200px; width: 100%; z-index: 50;">
-			<div style="position: absolute; bottom: 75px; right: 25px; height: 100px; width: 100px; background-image: url('img/support.png'); background-size: cover;"></div>
-			<div style="position: absolute; bottom: 25px; right: 25px; height: 40px; width: 500px; font-size: 20px; text-align: right;">
-				<span style="color: #DDD">友情链接：</span>
-				<a href="http://juruoyun.top">蒟蒻云</a> <a href="https://shajjl.github.io/">shajjl</a> <a href="https://www.luogu.org/space/show?uid=58357">洛谷</a> <a href="https://github.com/llh721113/llh721113.github.io">GitHub</a>
-			</div>
-			<div style="position: absolute; bottom: 0px; right: 25px; height: 40px; width: 500px; font-size: 10px; text-align: right;">
-				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
-			</div>
-		</div>
 
 		<div class="container" style="width: auto;">
 			<div class="row">
@@ -82,7 +69,8 @@
 							<span class="text-success">鼠标追踪功能开发完毕</span><br>
 							<span class="text-success">粒子特效功能开发完毕</span><span class="text-warning">------警告：可能会引起卡顿</span><br>
 							<span class="text-success">全分辨率宽度自适应开发完毕</span><br>
-							<span class="text-success">页面排版全新升级</span>
+							<span class="text-success">页面排版全新升级</span><br>
+							<span class="text-success">页脚位置优化</span>
 					    </div>
 					</div>
 				</div>
@@ -106,5 +94,19 @@
 				</div>
 			</div>
 		</div>
+
+		<div style="background-color: #DFF; background-image: url('img/bg1.jpg'); background-position: center center; background-repeat: no-repeat; background-size: cover; position: fixed; top: 0px; height: 100%; width: 100%; z-index: -100;"></div>
+
+		<div style="background: #444; height: 200px; width: 100%; z-index: 50; padding: 25px;">
+			<div style="position: relative; height: 100px; width: 100%; background-image: url('img/support.png'); background-position: right; background-size: contain; background-repeat: no-repeat;"></div>
+			<div style="position: relative; width: 100%; font-size: 20px; text-align: right;">
+				<span style="color: #DDD">友情链接：</span>
+				<a href="http://juruoyun.top">蒟蒻云</a> <a href="https://shajjl.github.io/">shajjl</a> <a href="https://www.luogu.org/space/show?uid=58357">洛谷</a> <a href="https://github.com/llh721113/llh721113.github.io">GitHub</a>
+			</div>
+			<div style="position: relative; width: 100%; font-size: 10px; text-align: right;">
+				<h6 style="color: #BBB">powered by HTML | powered by Javascirpt | powered by Jquery | powered by Bootstrap</h6>
+			</div>
+		</div>
+
 	</body>
 </html>
