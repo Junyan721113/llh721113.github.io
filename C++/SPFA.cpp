@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <cstring>
 using namespace std;
 const int INF=1000000000;
@@ -7,22 +8,21 @@ struct edge
 	int vex,wgt;
 	int nxt;
 }e[1000010];
-int first[100010],dis[100010];
-bool vis[100010];
-int tot,n,m,st;
+int first[100010],tot;
+bool inq[100010];
+int n,m,st,dis[100010];
+queue <int> q;
 void fadd(int a,int b,int c)
 {
 	e[++tot].vex=b;
 	e[tot].wgt=c;
 	e[tot].nxt=first[a];
 	first[a]=tot;
-	return;
 }
 int main()
 {
 	int a,b,c;
-	cin>>n>>m;
-	cin>>st;
+	cin>>n>>m>>st;
 	memset(first,-1,sizeof(first));
 	for(int i=1;i<=m;i++)
 	{
@@ -30,16 +30,28 @@ int main()
 		fadd(a,b,c);
 		//fadd(b,a,c);
 	}
-	memset(vis,false,sizeof(vis));
 	for(int i=1;i<=n;i++) dis[i]=INF;
+	q.push(st);
+	inq[st]=true;
 	dis[st]=0;
-	int minn,k;
-	for(int i=1;i<=n;i++)
+	while(!q.empty())
 	{
-		minn=INF;
-		for(int j=1;j<=n;j++) if(!vis[j] && minn>dis[j]) {minn=dis[j];k=j;}
-		vis[k]=true;
-		for(int j=first[k];j!=-1;j=e[j].nxt) if(!vis[e[j].vex] && dis[e[j].vex]>dis[k]+e[j].wgt) dis[e[j].vex]=dis[k]+e[j].wgt;
+		int u=q.front();
+		q.pop();
+		inq[u]=false;
+		for(int i=first[u];i!=-1;i=e[i].nxt)
+		{
+			int v=e[i].vex;
+			if(dis[v]>dis[u]+e[i].wgt)
+			{
+				dis[v]=dis[u]+e[i].wgt;
+				if(!inq[v])
+				{
+					q.push(v);
+					inq[v]=true;
+				}
+			}
+		}
 	}
 	for(int i=1;i<=n;i++) cout<<dis[i]<<' ';
 	cout<<endl;
