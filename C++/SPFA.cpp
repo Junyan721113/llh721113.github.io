@@ -8,7 +8,7 @@ struct edge
 	int vex,wgt;
 	int nxt;
 }e[1000010];
-int first[100010],tot;
+int first[100010],tot=0;
 bool inq[100010];
 int n,m,st,dis[100010];
 queue <int> q;
@@ -18,6 +18,7 @@ void fadd(int a,int b,int c)
 	e[tot].wgt=c;
 	e[tot].nxt=first[a];
 	first[a]=tot;
+	return;
 }
 int main()
 {

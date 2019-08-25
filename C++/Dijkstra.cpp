@@ -9,7 +9,7 @@ struct edge
 }e[1000010];
 int first[100010],dis[100010];
 bool vis[100010];
-int tot,n,m,st;
+int tot=0,n,m,st;
 void fadd(int a,int b,int c)
 {
 	e[++tot].vex=b;
