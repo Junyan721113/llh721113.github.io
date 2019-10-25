@@ -225,7 +225,7 @@ body
 	{
 		speedx=Math.cos(dir)*speed;
 		speedy=Math.sin(dir)*speed;
-		document.getElementById("sc").style.visible="visible";
+		document.getElementById("sc").style.visibility="visible";
 		document.getElementById("bstart").style.visibility="hidden";
 		document.getElementById("b+").style.visibility="hidden";
 		document.getElementById("sp").style.visibility="hidden";
@@ -246,7 +246,7 @@ body
 		</div>
 		<button id="bstart" onclick="start();" style="position: absolute; top: 50px; left: 250px; height: 100px; width: 300px; text-align:center; font-size: 30px; border-radius: 25px; background: #888888";>开始游戏！
 		</button>
-		<p id="sc" style="position: absolute; top: -50px; left: 10px; font-size: 50px; visibility: 'hidden'; user-select: none;">0</p>
+		<p id="sc" style="position: absolute; top: -50px; left: 10px; font-size: 50px; visibility: hidden; user-select: none;">0</p>
 		<button id="b-" onclick="speed--;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 250px; top: 200px; width: 100px; height: 50px; background: #CFF;">减慢速度</button>
 		<p id="sp" style="position: absolute; left: 385px; top: 140px; font-size: 50px;">2</p>
 		<button id="b+" onclick="speed++;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 450px; top: 200px; width: 100px; height: 50px; background: #CFF;">增加速度</button>

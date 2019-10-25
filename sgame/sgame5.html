@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>生存战争</title>
+	<script type="text/javascript">
+        var g = new Array();
+        var player, plx, ply;
+        var mousecur;
+        var buildtype = 0;
+        var NTPnum = 0, NTPx = new Array(), NTPy = new Array(), NTPstate = new Array();
+        var collectornum = 0, collectorx = new Array(), collectory = new Array(), collectorstate = new Array();
+        var shadownum = 0;
+        for (var i = 1; i <= 40; i++) {
+            g[i] = new Array();
+            for (var j = 1; j <= 50; j++) {
+                g[i][j] = new Array;
+                for (var k = 0; k <= 1; k++) {
+                    g[i][j][k] = 0;
+                }
+            }
+        }
+        function mousemove() {
+            var mx = Math.floor((window.event.clientY + 10) / 20), my = Math.floor((window.event.clientX + 10) / 20);
+            if (mx >= 1 && mx <= 40 && my >= 1 && my <= 50) {
+                mousecur.style.top = (mx - 1) * 20 - 5 + "px";
+                mousecur.style.left = (my - 1) * 20 - 5 + "px";
+                document.getElementById("resp").innerHTML = g[mx][my][0] + "NTP";
+            }
+            while (shadownum > 0) {
+                document.getElementById("bg").removeChild(document.getElementById("Shadow" + shadownum));
+                shadownum--;
+            }
+            if (buildtype == 1) {
+                for (var i = 1; i <= 40; i++)
+                    for (var j = 1; j <= 50; j++)
+                        if ((mx - i) * (mx - i) + (my - j) * (my - j) <= 50) {
+                            shadownum++;
+                            var newshadow = document.createElement("div");
+                            document.getElementById("bg").appendChild(newshadow);
+                            newshadow.id = "Shadow" + shadownum;
+                            newshadow.style = "position: absolute; width: 20px; height: 20px; background: #777; z-index: 100; opacity: 0.5;";
+                            newshadow.style.top = (i - 1) * 20 + "px";
+                            newshadow.style.left = (j - 1) * 20 + "px";
+                        }
+            }
+        }
+        function buildcollector() {
+            buildtype = 1;
+            mousecur.style.background = "#700";
+            document.getElementById("bg").onmousedown = function () {
+                build();
+            }
+        }
+        function build() {
+            document.getElementById("bg").onmousedown = function () { }
+            mousecur.style.background = "";
+            var mx = Math.floor((window.event.clientY + 10) / 20), my = Math.floor((window.event.clientX + 10) / 20);
+            var newbuilding = document.createElement("div");
+            document.getElementById("bg").appendChild(newbuilding);
+            newbuilding.style = "position: absolute; width: 20px; height: 20px; z-index: 100;";
+            newbuilding.style.top = (mx - 1) * 20 + "px";
+            newbuilding.style.left = (my - 1) * 20 + "px";
+            switch (buildtype) {
+                case 1: {
+                    newbuilding.style.background = "#B77";
+                    collectornum++;
+                    collectorx[collectornum] = mx;
+                    collectory[collectornum] = my;
+                    collectorstate[collectornum] = 0;
+                    break;
+                }
+            }
+            buildtype = 0;
+        }
+        function collect() {
+            for (var j = 1; j <= collectornum; j++) {
+                if (collectorstate[j] != 0) continue;
+                else for (var i = 1; i <= NTPnum; i++) {
+                    if (NTPstate[i] != 0 && NTPstate[i] != j) continue;
+                    else if (NTPx[i] == collectorx[j] && NTPy[i] == collectory[j]) {
+                        NTPstate[i] = -1;
+                        continue;
+                    }
+                    else if ((NTPx[i] - collectorx[j]) * (NTPx[i] - collectorx[j]) + (NTPy[i] - collectory[j]) * (NTPy[i] - collectory[j]) <= 50) {
+                        NTPstate[i] = j;
+                        g[NTPx[i]][NTPy[i]][0]--;
+                        if(NTPx[i] > collectorx[j]) NTPx[i]--;
+                        if(NTPx[i] < collectorx[j]) NTPx[i]++;
+                        if(NTPy[i] > collectory[j]) NTPy[i]--;
+                        if(NTPy[i] < collectory[j]) NTPy[i]++;
+                        g[NTPx[i]][NTPy[i]][0]++;
+                        document.getElementById("NTP" + i).style.top = (NTPx[i] - 1) * 20 + "px";
+                        document.getElementById("NTP" + i).style.left = (NTPy[i] - 1) * 20 + "px";
+                        break;
+                    }
+                }
+            }
+        }
+        function delivery() {
+
+        }
+        function cancel() {
+            if (buildtype != 0) {
+                buildtype = 0;
+                mousecur.style.background = "";
+                document.getElementById("bg").onmousedown = function () { }
+            }
+        }
+        function start() {
+            document.getElementById('bstart').style.display = "none";
+            document.getElementById('bdlist').style.visibility = "visible";
+            document.getElementById("bg").onmousemove = function() {
+                mousemove();
+            };
+            //生成玩家
+            plx = Math.floor(Math.random() * 19260817 % 40) + 1;//竖x横y
+            ply = Math.floor(Math.random() * 19260817 % 50) + 1;
+            player = document.createElement("div");
+            document.getElementById("bg").appendChild(player);
+            player.style = "position: absolute; width: 20px; height: 20px; background: #333; z-index: 150;";
+            collectornum++;
+            collectorx[collectornum] = plx;
+            collectory[collectornum] = ply;
+            collectorstate[collectornum] = 0;
+            mousecur = document.createElement("div");
+            document.getElementById("bg").appendChild(mousecur);
+            mousecur.style = "position: absolute; width: 20px; height: 20px; z-index: 200; opacity: 0.5; border-width: 5px; border-style: solid; border-color:#700;";
+            player.style.top = (plx - 1) * 20 + "px";
+            player.style.left = (ply - 1) * 20 + "px";
+            //生成NTP
+            NTPnum = 3000;
+            for (var i = 1; i <= 3000; i++) {
+                var x = Math.floor(Math.random() * 19260817 % 40) + 1, y = Math.floor(Math.random() * 19260817 % 50) + 1;
+                g[x][y][0] += 1;
+                var newNTP = document.createElement("div");
+                document.getElementById("bg").appendChild(newNTP);
+                newNTP.id = "NTP" + i;
+                newNTP.style = "position: absolute; width: 20px; height: 20px; background: #77F; opacity: 0.1;";
+                newNTP.style.top = (x - 1) * 20 + "px";
+                newNTP.style.left = (y - 1) * 20 + "px";
+                NTPx[i] = x;
+                NTPy[i] = y;
+                NTPstate[i] = 0;
+            }
+            setInterval("collect();", 500);
+		}
+	</script>
+</head>
+<body>
+    <div id="bg" style="position: absolute; top: 0px; left: 0px; height: 800px; width: 1000px; background-color: #FFF; border-color: #777; border-width: 10px; border-style: solid;">
+        <button id="bstart" onclick="start();" style="position: absolute; height: 50px; width: 100px; top: 375px; left: 450px;">开始游戏！</button>
+    </div>
+    <div style="position: absolute; top: 0px; left: 1030px; height: 300px; width: 150px; background-color: #FFF; border-color: #777; border-width: 10px; border-style: solid;">
+        <span>Resources:</span><br />
+        <span id="resp"></span>
+    </div>
+    <div style="position: absolute; top: 310px; left: 1030px; height: 300px; width: 150px; background-color: #FFF; border-color: #777; border-width: 10px; border-style: solid;">
+        <span>Details:</span><br />
+    </div>
+    <div id="bdlist" style="position: absolute; top: 810px; left: 0px; height: 100px; width: 1000px; background-color: #FFF; border-color: #777; border-width: 10px; border-style: solid; visibility: hidden;">
+        <span>Build:</span><br />
+        <button onclick="buildcollector();">Collector</button>
+        <button onclick="cancel();">Cancel</button>
+    </div>
+</body>
+</html>
