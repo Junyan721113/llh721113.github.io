@@ -4,7 +4,7 @@
 	width:200px;
 	background-image: url(juruoyun_countdown.png);
 	background-position: center center;
-	background-size: contain;
+	background-size: cover;
 }
 .main_table .table_left .event_normal{color:#ff0000;font-size:20px;}
 .main_table .table_left .event_event{color:#ff0000;font-size:25px;}
