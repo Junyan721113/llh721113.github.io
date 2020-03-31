@@ -1,5 +1,12 @@
 .main_table{border-spacing: 0px;}
-.main_table .table_left{	background-color:#F8F8A8;width:200px;}
+.main_table .table_left{
+	background-color:#F8F8A8;
+	width:200px;
+	padding: 5px;
+	background-image: url(juruoyun_countdown.png);
+	background-position: center center;
+	background-size: cover;
+}
 .main_table .table_left .event_normal{color:#ff0000;font-size:20px;}
 .main_table .table_left .event_event{color:#ff0000;font-size:25px;}
 .main_table .table_left .event_time{color:#ff0000;font-size:30px;}
