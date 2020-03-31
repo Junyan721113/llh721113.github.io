@@ -694,7 +694,7 @@ input[type=""],input[type="submit"],input[type="reset"]{-moz-appearance: none;-w
 	border-radius: 10px; 
 	padding: 5px; 
 	min-width: 200px; 
-	margin-top: 5px; 
+	margin: 5px; 
 	color:#33F;
 	font-size:30px;
 }
