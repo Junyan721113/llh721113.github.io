@@ -333,6 +333,9 @@ a:active{color:#AA0}
 .jry_wb_left_toolbar .jry_wb_left_toolbar_left .jry_wb_left_toolbar_left_list_1
 {
 	background-color:#92E80C;font-size:30px;color:#00F;height:40px;
+	background-image: url(juruoyun_sidebtn1.png);
+	background-position: center center;
+	background-size: cover;
 }
 .jry_wb_left_toolbar .jry_wb_left_toolbar_left .jry_wb_left_toolbar_left_list_1:hover
 {
@@ -341,6 +344,9 @@ a:active{color:#AA0}
 .jry_wb_left_toolbar .jry_wb_left_toolbar_left .jry_wb_left_toolbar_left_list_2
 {
 	background-color:#FF0;font-size:30px;color:#00F;height:40px;
+	background-image: url(juruoyun_sidebtn2.png);
+	background-position: center center;
+	background-size: cover;
 }
 .jry_wb_left_toolbar .jry_wb_left_toolbar_left .jry_wb_left_toolbar_left_list_2:hover
 {
