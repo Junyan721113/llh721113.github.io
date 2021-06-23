@@ -5,24 +5,43 @@
 		<title>坦克射击</title>
 		<script type="text/javascript">
 			var bulletnum=0,enemynum=0,dirx=0,diry=0,started=0,score=0;
+			var playerx = 200, playery = 250, player;
 			var bx=new Array();
 			var by=new Array();
 			var bvx=new Array();
 			var bvy=new Array();
 			var enh=new Array();
 			var enl=new Array();
+			var enemy = new Array();
+			var playtime = 0;
+			var flytimer, summontimer;
+			var maxscore = 0;
 			function move()
 			{
-				var x=window.event.clientX-200,y=window.event.clientY-250;
+				var x=window.event.clientX-playerx,y=window.event.clientY-playery;
 				var r=Math.sqrt(x*x+y*y);
-				dirx=x/r;diry=y/r;
+				dirx = x / r;diry = y / r;
+			}
+			function keymove() {
+				var keyc = window.event.keyCode;
+				//alert(keyc);
+				if(keyc == 87 && playery > 15) playery -= 10;
+				if(keyc == 65 && playerx > 15) playerx -= 10;
+				if(keyc == 83 && playery < 485) playery += 10;
+				if(keyc == 68 && playerx < 985) playerx += 10;
+				player.style.top = playery - 15 + "px";
+				player.style.left = playerx - 15 + "px";
 			}
 			function start()
 			{
+				document.onmousemove=move;
+				document.onmousedown=fire;
+				document.onkeydown = keymove;
 				document.getElementById('bstart').style.visibility="hidden";
 				document.getElementById('tank').style.visibility="visible";
-				setInterval("fly();",10);
-				setInterval("summon();",500);
+				player = document.getElementById('tank');
+				flytimer = setInterval("fly();",10);
+				summontimer = setTimeout(summon(), 500);
 				setTimeout("started=1;",10);
 			}
 			function fire()
@@ -32,35 +51,50 @@
 				var bullet=document.createElement("div")
 				bullet.id='b'+bulletnum;
 				document.getElementById('bg').appendChild(bullet);
-				bullet.style="position: absolute; top: 245px; left: 195px; height: 10px; width: 10px; border-radius: 5px; background: #FF8888; z-index: 150;"
-				bx[bulletnum]=200;by[bulletnum]=250;
+				bullet.style="position: absolute; height: 10px; width: 10px; border-radius: 5px; background: #FF8888; z-index: 150;"
+				bullet.style.left = (bx[bulletnum] = playerx) + "px";
+				bullet.style.top = (by[bulletnum] = playery) + "px";
 				bvx[bulletnum]=dirx;bvy[bulletnum]=diry;
 			}
 			function fly()
 			{
 				for(var i=1;i<=bulletnum;i++)
 				{
-					bx[i]+=bvx[i]*5;
-					by[i]+=bvy[i]*5;
+					bx[i]+=bvx[i]*10;
+					by[i]+=bvy[i]*10;
+					bvx[i] *= 0.99;
+					bvy[i] *= 0.99;
 					document.getElementById('b'+i).style.left=bx[i]-5+'px';
 					document.getElementById('b'+i).style.top=by[i]-5+'px';
 					if(bx[i]<=5 || bx[i]>=995 || by[i]<=5 || by[i]>=495) delbul(i);
-					for(var j=1;j<=enemynum;j++)
+					for(var j=0;j<enemy.length;j++)
 					{
+						if(enemy[j] == null) continue;
 						if((bx[i]-enl[j])*(bx[i]-enl[j])+(by[i]-enh[j])*(by[i]-enh[j])<=400)
 						{
 							delbul(i);
 							delene(j);
 							score++;
 							document.getElementById('sc').innerHTML=score;
+							maxscore = Math.max(score, maxscore);
 						}
 					}
 				}
-				for(var i=1;i<=enemynum;i++)
+				for(var i=0;i<enemy.length;i++)
 				{
+					if(enemy[i] == null) continue;
 					enl[i]-=0.5;
-					document.getElementById('e'+i).style.left=enl[i]-15+'px';
-					if(enl[i]<=15) delene(i);
+					enemy[i].style.left=enl[i]-15+'px';
+					if(enl[i]<=15) {
+						delene(i);
+						score -= 10;
+						document.getElementById('sc').innerHTML=score;
+						if(score < 0) {
+							clearInterval(flytimer);
+							clearTimeout(summontimer);
+							alert("游戏结束，您的分数为" + maxscore)
+						}
+					}
 				}
 			}
 			function delbul(i)
@@ -83,35 +117,27 @@
 			}
 			function delene(i)
 			{
-				if(i==enemynum)
-				{
-					document.getElementById('bg').removeChild(document.getElementById('e'+i));
-					enemynum--;
-				}
-				else
-				{
-					document.getElementById('bg').removeChild(document.getElementById('e'+i));
-					document.getElementById('e'+enemynum).id='e'+i;
-					enl[i]=enl[enemynum];
-					enh[i]=enh[enemynum];
-					enemynum--;
-				}
+				document.getElementById('bg').removeChild(document.getElementById('e'+i));
+				enemy[i] = null;
 			}
 			function summon()
 			{
-				enemynum++;
-				var enemy=document.createElement('div');
-				enh[enemynum]=(Math.random()*19260817)%470+15;
-				enl[enemynum]=985;
-				enemy.id='e'+enemynum;
-				document.getElementById('bg').appendChild(enemy);
-				enemy.style="position: absolute; left: 970px; height: 30px; width: 30px; border-radius: 15px; background: #FF4444; z-index: 125;"
-				enemy.style.top=enh[enemynum]-15+'px';
+				playtime++;
+				let k = 0;
+				while(enemy[k] != null) k++;
+				enemy[k]=document.createElement('div');
+				enh[k]=(Math.random()*19260817)%470+15;
+				enl[k]=985;
+				enemy[k].id='e'+k;
+				document.getElementById('bg').appendChild(enemy[k]);
+				enemy[k].style="position: absolute; left: 970px; height: 30px; width: 30px; border-radius: 15px; background: #FF4444; z-index: 125;"
+				enemy[k].style.top=enh[k]-15+'px';
+				summontimer = setTimeout(summon, 50000 / (100 + score));
 			}
 		</script>
 	</head>
 	<body>
-		<div id="bg" onmousemove="move();" onmousedown="fire();" style="position: absolute; top: 0px; left: 0px; height: 500px; width: 1000px; background: #FFFF88; z-index: 0;">
+		<div id="bg" style="position: absolute; top: 0px; left: 0px; height: 500px; width: 1000px; background: #FFFF88; z-index: 0;">
 			<button id="bstart" onclick="start();" style="position: absolute; top: 225px; left: 450px; height: 50px; width: 100px; border: 2px solid #888888; border-radius: 20px; z-index: 1000; user-select: none;">开始游戏</button>
 			<div id="tank" style="position: absolute; top: 235px; left: 185px; height: 30px; width: 30px; border-radius: 25px; background: #008888; visibility: hidden; z-index: 100;"></div>
 			<div id="sc" style="font-size: 50px; z-index: 120; position: absolute; top: 0px; left: 0px; user-select: none;">0</div>
