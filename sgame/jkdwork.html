@@ -1,0 +1,743 @@
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>基地保卫战</title>
+        <script>
+            const spreadratio = 0.1;//扩散比率，最大不建议超过0.25
+            const spreadflow = 5;//最低扩散浓度
+            const spreadspeed = 100;//污染扩散速度
+            const emitamt = 500.0;//污染产生数量
+            const emitspeed = 300;//污染产生速度
+            const blasterspeed = 300;//激光射速
+            const blasterrange = 15;//激光射程
+            const blasterexplode = 5;//激光溅射范围
+            const blasterfire = 5;//激光开火攻击量
+            const mortarspeed = 2000;//大炮射速
+            const mortarrange = 20;//大炮射程
+            const mortarexplode = 2;//大炮溅射范围
+            const mortarfire = 500;//大炮开火攻击量
+            const nullifierspeed = 5;//炸弹射速
+            const nullifierrange = 10;//炸弹射程
+            const energyspeed = 50;//能量生产速度
+            const energyamt = 0.05;//能量生产单位
+            const framespeed = 100;//数据刷新帧率
+            const deltaspeed = 800;
+            var enemynum = 5;
+            var state = "start", anim = "show";
+            var selectnum = -1;
+            var base, basetimer, basex, basey;
+            var mousex = 0, mousey = 0;
+            var ground = new Array;
+            var density = new Array;
+            var energy = 5.0, maxenergy = 30, tenergy = 5.0, deltaenergy = 0.0;
+            var predensity = new Array;
+            var blaster = new Array, blastertimer = new Array, blasterx = new Array, blastery = new Array;
+            var mortar = new Array, mortartimer = new Array, mortarx = new Array, mortary = new Array;
+            var nullifier = new Array, nullifierx = new Array, nullifiery = new Array;
+            var reactor = new Array, reactorx = new Array, reactory = new Array, reactornum = 0;
+            var storage = new Array, storagex = new Array, storagey = new Array, storagenum = 0;
+            var enemy = new Array, enemytimer = new Array, enemyx = new Array, enemyy = new Array;
+            //var blasterdrawtop = 0;
+            var blasterdrawline = new Array;
+            /********初始化部分********/
+            function start() {
+                state = "select";
+                document.getElementById("StartButton").style.visibility = "hidden";
+                document.getElementById("StartDiv").style.visibility = "hidden";
+                //document.getElementById("cursor").style.visibility = "visible";
+                startbase();
+                startground();
+                startenemy();
+                setInterval(spread, spreadspeed);
+                setInterval(densityupd, framespeed);
+                setInterval(energyproduce, energyspeed);
+                setInterval(energycount, deltaspeed);
+            }
+
+            function startbase() {
+                base = document.createElement("div");
+                document.getElementById("Back").appendChild(base);
+                base.id = "base";
+                base.className = "base";
+                base.style.left = (basey = Math.floor(Math.random() * 19260817) % 158) * 10 + "px";
+                base.style.top = (basex = Math.floor(Math.random() * 19260817) % 78) * 10 + "px";
+                basex += 1;
+                basey += 1;
+                basetimer = setInterval(function(){basetarget(basex, basey);}, blasterspeed);
+            }
+
+            function startenemy() {
+                for(let k = 0; k < enemynum; k++) {
+                    enemy[k] = document.createElement("div");
+                    document.getElementById("Back").appendChild(enemy[k]);
+                    enemy[k].id = "enemy" + k;
+                    enemy[k].className = "enemy";
+                    enemy[k].style.top = (enemyx[k] = Math.floor(Math.random() * 19260817) % 78) * 10 + "px";
+                    enemy[k].style.left = (enemyy[k] = Math.floor(Math.random() * 19260817) % 158) * 10 + "px";
+                    enemyx[k] += 1;
+                    enemyy[k] += 1;
+                    enemytimer[k] = setInterval(emit, emitspeed, enemyx[k], enemyy[k]);
+                }
+            }
+
+            function startground() {
+                for(let i = 0; i < 80; i++) {
+                    for(let j = 0; j < 160; j++) {
+                        ground[i * 160 + j] = document.createElement("div");
+                        document.getElementById("Back").appendChild(ground[i * 160 + j]);
+                        ground[i * 160 + j].id = "g(" + i + "," + j + ")";
+                        ground[i * 160 + j].className = "ground";
+                        ground[i * 160 + j].style.top = i * 10 + "px";
+                        ground[i * 160 + j].style.left = j * 10 + "px";
+                        ground[i * 160 + j].style.opacity = 0.0;
+                        density[i * 160 + j] = 0.0;
+                        const ii = i, jj = j;//化成const就可以直接引用了！
+                        //ground[i * 160 + j].onmousemove = function(){move(ii, jj);};
+                        ground[i * 160 + j].onmousedown = function(){click(ii, jj);};
+                    }
+                }
+            }
+            /********鼠标控制部分********/
+            function click(i, j) {
+                //const ii = i, jj = j;
+                if(state == "buildblaster" && energy >= 25) {
+                    buildblaster(i, j);
+                    energy -= 25;
+                    energyupd();
+                }
+                if(state == "buildmortar" && energy >= 50) {
+                    buildmortar(i, j);
+                    energy -= 50;
+                    energyupd();
+                }
+                if(state == "buildnullifier" && energy >= 100) {
+                    buildnullifier(i, j);
+                    energy -= 100;
+                    energyupd();
+                }
+                if(state == "buildreactor" && energy >= 5) {
+                    buildreactor(i, j);
+                    energy -= 5;
+                    energyupd();
+                }
+                if(state == "buildstorage" && energy >= 10) {
+                    buildstorage(i, j);
+                    energy -= 10;
+                    energyupd();
+                }
+                if(state == "selectblaster") {
+                    moveblaster(selectnum, i, j);
+                    cancelselect();
+                }
+                if(state == "selectmortar") {
+                    movemortar(selectnum, i, j);
+                    cancelselect();
+                }
+            }
+
+            function cancelselect() {
+                /*if(state == "selectblaster") {
+                    blaster[selectnum].className = "blaster";
+                }
+                if(state == "selectmortar") {
+                    mortar[selectnum].className = "mortar";
+                }
+                if(state == "selectnullifier") {
+                    mortar[selectnum].className = "nullifier";
+                }*/
+                document.getElementById("cursor").style.visibility = "hidden";
+                selectnum = -1;
+                state = "select";
+            }
+
+            function selectreactor(k) {
+                state = "selectreactor";
+                selectnum = k;
+                document.getElementById("cursor").style.visibility = "visible";
+                document.getElementById("cursor").style.top = (reactorx[k] - 1) * 10 - 3 + "px";
+                document.getElementById("cursor").style.left = (reactory[k] - 1) * 10 - 3 + "px";
+            }
+
+            function selectstorage(k) {
+                state = "selectstorage";
+                selectnum = k;
+                document.getElementById("cursor").style.visibility = "visible";
+                document.getElementById("cursor").style.top = (storagex[k] - 1) * 10 - 3 + "px";
+                document.getElementById("cursor").style.left = (storagey[k] - 1) * 10 - 3 + "px";
+            }
+
+            function selectblaster(k) {
+                state = "selectblaster";
+                selectnum = k;
+                document.getElementById("cursor").style.visibility = "visible";
+                document.getElementById("cursor").style.top = (blasterx[k] - 1) * 10 - 3 + "px";
+                document.getElementById("cursor").style.left = (blastery[k] - 1) * 10 - 3 + "px";
+            }
+
+            function selectmortar(k) {
+                state = "selectmortar";
+                selectnum = k;
+                document.getElementById("cursor").style.visibility = "visible";
+                document.getElementById("cursor").style.top = (mortarx[k] - 1) * 10 - 3 + "px";
+                document.getElementById("cursor").style.left = (mortary[k] - 1) * 10 - 3 + "px";
+            }
+
+            function selectnullifier(k) {
+                state = "selectnullifier";
+                selectnum = k;
+                document.getElementById("cursor").style.visibility = "visible";
+                document.getElementById("cursor").style.top = (nullifierx[k] - 1) * 10 - 3 + "px";
+                document.getElementById("cursor").style.left = (nullifiery[k] - 1) * 10 - 3 + "px";
+            }
+
+            function buildreactor(i, j) {
+                let k = 0;
+                while(reactor[k] != null) k++;
+                reactor[k] = document.createElement("div");
+                document.getElementById("Back").appendChild(reactor[k]);
+                reactor[k].id = "reactor" + k;
+                reactor[k].className = "reactor";
+                reactorx[k] = i;
+                reactory[k] = j;
+                reactor[k].style.top = (i - 1) * 10 + "px";
+                reactor[k].style.left = (j - 1) * 10 + "px";
+                const kk = k;
+                reactor[k].onmousedown = function(){selectreactor(kk);};
+                reactornum++;
+            }
+
+            function buildstorage(i, j) {
+                let k = 0;
+                while(storage[k] != null) k++;
+                storage[k] = document.createElement("div");
+                document.getElementById("Back").appendChild(storage[k]);
+                storage[k].id = "storage" + k;
+                storage[k].className = "storage";
+                storagex[k] = i;
+                storagey[k] = j;
+                storage[k].style.top = (i - 1) * 10 + "px";
+                storage[k].style.left = (j - 1) * 10 + "px";
+                const kk = k;
+                storage[k].onmousedown = function(){selectreactor(kk);};
+                storagenum++;
+                maxenergy += 10;
+            }
+
+            function buildblaster(i, j) {
+                let k = 0;
+                while(blaster[k] != null) k++;
+                blaster[k] = document.createElement("div");
+                document.getElementById("Back").appendChild(blaster[k]);
+                blaster[k].id = "blaster" + k;
+                blaster[k].className = "blaster";
+                blasterx[k] = i;
+                blastery[k] = j;
+                blaster[k].style.top = (i - 1) * 10 + "px";
+                blaster[k].style.left = (j - 1) * 10 + "px";
+                blastertimer[k] = setInterval(function(){blastertarget(k);}, blasterspeed);
+                const kk = k;
+                blaster[k].onmousedown = function(){selectblaster(kk);};
+            }
+
+            function buildmortar(i, j) {
+                let k = 0;
+                while(mortar[k] != null) k++;
+                mortar[k] = document.createElement("div");
+                document.getElementById("Back").appendChild(mortar[k]);
+                mortar[k].id = "mortar" + k;
+                mortar[k].className = "mortar";
+                mortarx[k] = i;
+                mortary[k] = j;
+                mortar[k].style.top = (i - 1) * 10 + "px";
+                mortar[k].style.left = (j - 1) * 10 + "px";
+                mortartimer[k] = setInterval(function(){mortartarget(k);}, mortarspeed);
+                const kk = k;
+                mortar[k].onmousedown = function(){selectmortar(kk);};
+            }
+
+            function buildnullifier(i, j) {
+                let k = 0;
+                while(nullifier[k] != null) k++;
+                nullifier[k] = document.createElement("div");
+                document.getElementById("Back").appendChild(nullifier[k]);
+                nullifier[k].id = "nullifier" + k;
+                nullifier[k].className = "nullifier";
+                nullifierx[k] = i;
+                nullifiery[k] = j;
+                nullifier[k].style.top = (i - 1) * 10 + "px";
+                nullifier[k].style.left = (j - 1) * 10 + "px";
+                nullifiercountdown(k, nullifierspeed);
+                const kk = k;
+                nullifier[k].onmousedown = function(){selectnullifier(kk);};
+            }
+
+            function moveblaster(k, i, j) {
+                blasterx[k] = i;
+                blastery[k] = j;
+                blaster[k].style.top = (i - 1) * 10 + "px";
+                blaster[k].style.left = (j - 1) * 10 + "px";
+            }
+
+            function movemortar(k, i, j) {
+                mortarx[k] = i;
+                mortary[k] = j;
+                mortar[k].style.top = (i - 1) * 10 + "px";
+                mortar[k].style.left = (j - 1) * 10 + "px";
+            }
+
+            /*function move(i, j) {
+                if(mousex != i) document.getElementById("cursor").style.top = (i - 1) * 10 - 3 + "px";
+                if(mousey != j) document.getElementById("cursor").style.left = (j - 1) * 10 - 3 + "px";
+                mousex = i;
+                mousey = j;
+            }*/
+            /*function mousedetect() {
+                i = window.event.pageY / 10;
+                j = window.event.pageX / 10;
+                if(mousex != i) document.getElementById("cursor").style.top = (i - 1) * 10 - 3 + "px";
+                if(mousey != j) document.getElementById("cursor").style.left = (j - 1) * 10 - 3 + "px";
+                mousex = i;
+                mousey = j;
+            }*/
+            /********定时处理部分********/
+
+            function energyproduce() {
+                energy += energyamt * (4 + reactornum);
+                if(energy > maxenergy) energy = maxenergy;
+                energyupd();
+            }
+
+            function energycount() {
+                deltaenergy = energy - tenergy;
+                tenergy = energy;
+            }
+
+            function densityupd() {
+                document.getElementById("pdensity").innerHTML = "浓度: " + Math.ceil(density[mousex * 160 + mousey] * 100) / 100;
+            }
+
+            function energyupd() {
+                document.getElementById("penergyfill").innerHTML = "能量: " + Math.ceil(energy * 100) / 100;
+                document.getElementById("penergydelta").innerHTML = "速度：" + Math.round(deltaenergy / deltaspeed * 1000 * 100) / 100;
+                document.getElementById("penergyfill").style.width = energy / maxenergy * 500 + "px";
+            }
+
+            function emit(i, j) {
+                density[i * 160 + j] += emitamt;
+            }
+
+            function destroydetect() {
+                for(let k = 0; k < blaster.length; k++) {
+                    if(blaster[k] == null) continue;
+                    let x = blasterx[k], y = blastery[k];
+                    let f = true;
+                    for(let i = -1; f && i <= 1; i++) {
+                        for(let j = -1; f && j <= 1; j++) {
+                            if(density[(x + i) * 160 + (y + j)] > 0) {
+                                destroyblaster(k);
+                                f = false;
+                            }
+                        }
+                    }
+                }
+                for(let k = 0; k < mortar.length; k++) {
+                    if(mortar[k] == null) continue;
+                    let x = mortarx[k], y = mortary[k];
+                    let f = true;
+                    for(let i = -1; f && i <= 1; i++) {
+                        for(let j = -1; f && j <= 1; j++) {
+                            if(density[(x + i) * 160 + (y + j)] > 0) {
+                                destroymortar(k);
+                                f = false;
+                            }
+                        }
+                    }
+                }
+                for(let k = 0; k < nullifier.length; k++) {
+                    if(nullifier[k] == null) continue;
+                    let x = nullifierx[k], y = nullifiery[k];
+                    let f = true;
+                    for(let i = -1; f && i <= 1; i++) {
+                        for(let j = -1; f && j <= 1; j++) {
+                            if(density[(x + i) * 160 + (y + j)] > 0) {
+                                destroynullifier(k);
+                                f = false;
+                            }
+                        }
+                    }
+                }
+                for(let k = 0; k < reactor.length; k++) {
+                    if(reactor[k] == null) continue;
+                    let x = reactorx[k], y = reactory[k];
+                    let f = true;
+                    for(let i = -1; f && i <= 1; i++) {
+                        for(let j = -1; f && j <= 1; j++) {
+                            if(density[(x + i) * 160 + (y + j)] > 0) {
+                                destroyreactor(k);
+                                f = false;
+                            }
+                        }
+                    }
+                }
+                for(let k = 0; k < storage.length; k++) {
+                    if(storage[k] == null) continue;
+                    let x = storagex[k], y = storagey[k];
+                    let f = true;
+                    for(let i = -1; f && i <= 1; i++) {
+                        for(let j = -1; f && j <= 1; j++) {
+                            if(density[(x + i) * 160 + (y + j)] > 0) {
+                                destroystorage(k);
+                                f = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            function destroyenemy(k) {
+                clearInterval(enemytimer[k]);
+                document.getElementById("Back").removeChild(enemy[k]);
+                enemy[k] = null;
+                enemynum--;
+                if(enemynum == 0) document.getElementById("VictoryDiv").style.visibility = "visible";
+            }
+            
+            function destroyblaster(k) {
+                clearInterval(blastertimer[k]);
+                document.getElementById("Back").removeChild(blaster[k]);
+                blaster[k] = null;
+            }
+
+            function destroymortar(k) {
+                clearInterval(mortartimer[k]);
+                document.getElementById("Back").removeChild(mortar[k]);
+                mortar[k] = null;
+            }
+
+            function destroynullifier(k) {
+                document.getElementById("Back").removeChild(nullifier[k]);
+                nullifier[k] = null;
+            }
+
+            function destroyreactor(k) {
+                document.getElementById("Back").removeChild(reactor[k]);
+                reactor[k] = null;
+                reactornum--;
+            }
+
+            function destroystorage(k) {
+                document.getElementById("Back").removeChild(storage[k]);
+                storage[k] = null;
+                storagenum--;
+            }
+
+            function spread() {
+                for(let i = 0; i < 80; i++) {
+                    for(let j = 0; j < 160; j++) {
+                        predensity[i * 160 + j] = density[i * 160 + j];
+                    }
+                }
+
+                for(let i = 0; i < 80 - 1; i++) {
+                    for(let j = 0; j < 160 - 1; j++) {
+                        let diff = density[i * 160 + j] - density[(i + 1) * 160 + j];
+                        if(Math.abs(diff) > spreadflow) {
+                            predensity[i * 160 + j] -= diff * spreadratio;
+                            predensity[(i + 1) * 160 + j] += diff * spreadratio;
+                        }
+
+                        diff = density[i * 160 + j] - density[i * 160 + (j + 1)];
+                        if(Math.abs(diff) > spreadflow) {
+                            predensity[i * 160 + j] -= diff * spreadratio;
+                            predensity[i * 160 + (j + 1)] += diff * spreadratio;
+                        }
+                    }
+                }
+
+                for(let i = 0; i < 80 - 1; i++) {
+                    let diff = density[i * 160 + 159] - density[(i + 1) * 160 + 159];
+                    if(Math.abs(diff) > spreadflow) {
+                        predensity[i * 160 + 159] -= diff * spreadratio;
+                        predensity[(i + 1) * 160 + 159] += diff * spreadratio;
+                    }
+                }
+
+                for(let j = 0; j < 160 - 1; j++) {
+                    let diff = density[79 * 160 + j] - density[79 * 160 + (j + 1)];
+                    if(Math.abs(diff) > spreadflow) {
+                        predensity[79 * 160 + j] -= diff * spreadratio;
+                        predensity[79 * 160 + (j + 1)] += diff * spreadratio;
+                    }
+                }
+
+                for(let i = 0; i < 80; i++) {
+                    for(let j = 0; j < 160; j++) {
+                        density[i * 160 + j] = predensity[i * 160 + j];
+                    }
+                }
+                show();
+                destroydetect();
+            }
+
+            function show() {
+                for(let i = 0; i < 80; i++) {
+                    for(let j = 0; j < 160; j++) {
+                        let displayden = density[i * 160 + j];
+                        //if(displayden > 1) displayden = Math.log(displayden, 3);
+                        displayden /= 2;
+                        if(displayden > 0) displayden += 10;
+                        displayden /= 8;
+                        displayden = Math.ceil(displayden);
+                        displayden *= 8;
+                        if(displayden > 90) displayden = 90;
+                        document.getElementById("g(" + i + "," + j + ")").style.opacity = displayden / 100;
+                    }
+                }
+            }
+
+            function basetarget(x, y) {
+                if(energy < 0.25) return;
+                let minx = -1, miny = -1, mindis = 0x7FFFFFFF;
+                for(let i = -blasterrange; i <= blasterrange; i++) {
+                    if(x + i < 0 || x + i > 79) continue;
+                    for(let j = -blasterrange; j <= blasterrange; j++) {
+                        if(y + j < 0 || y + j > 159) continue;
+                        if(i * i + j * j <= blasterrange * blasterrange && density[(x + i) * 160 + (y + j)] > 0.0 && i * i + j * j < mindis) {
+                            mindis = i * i + j * j;
+                            minx = x + i;
+                            miny = y + j;
+                        }
+                    }
+                }
+                if(minx != -1 && miny != -1) {
+                    blasteratk(minx, miny);
+                    if(anim == "show") blasterdraw(x, y, minx, miny);
+                    energy -= 0.25;
+                    energyupd();
+                }
+            }
+
+            function blastertarget(k) {
+                let x = blasterx[k], y = blastery[k];
+                if(energy < 0.25) return;
+                let minx = -1, miny = -1, mindis = 0x7FFFFFFF;
+                for(let i = -blasterrange; i <= blasterrange; i++) {
+                    if(x + i < 0 || x + i > 79) continue;
+                    for(let j = -blasterrange; j <= blasterrange; j++) {
+                        if(y + j < 0 || y + j > 159) continue;
+                        if(i * i + j * j <= blasterrange * blasterrange && density[(x + i) * 160 + (y + j)] > 0.0 && i * i + j * j < mindis) {
+                            mindis = i * i + j * j;
+                            minx = x + i;
+                            miny = y + j;
+                        }
+                    }
+                }
+                if(minx != -1 && miny != -1) {
+                    blasteratk(minx, miny);
+                    if(anim == "show") blasterdraw(x, y, minx, miny);
+                    energy -= 0.25;
+                    energyupd();
+                }
+            }
+
+            function blasteratk(x, y) {
+                for(let i = -blasterexplode; i <= blasterexplode; i++) {
+                    if(x + i < 0 || x + i > 79) continue;
+                    for(let j = -blasterexplode; j <= blasterexplode; j++) {
+                        if(y + j < 0 || y + j > 159) continue;
+                        if(i * i + j * j <= blasterexplode * blasterexplode) {
+                            density[(x + i) * 160 + (y + j)] -= blasterfire;
+                            if(density[(x + i) * 160 + (y + j)] < 0) density[(x + i) * 160 + (y + j)] = 0.0;
+                        }
+                    }
+                }
+                show();
+            }
+
+            function mortartarget(k) {
+                let x = mortarx[k], y = mortary[k];
+                if(energy < 5) return;
+                let minx = -1, miny = -1, maxden = 0;
+                for(let i = -mortarrange; i <= mortarrange; i++) {
+                    if(x + i < 0 || x + i > 79) continue;
+                    for(let j = -mortarrange; j <= mortarrange; j++) {
+                        if(y + j < 0 || y + j > 159) continue;
+                        if(i * i + j * j <= mortarrange * mortarrange && density[(x + i) * 160 + (y + j)] > maxden) {
+                            maxden = density[(x + i) * 160 + (y + j)];
+                            minx = x + i;
+                            miny = y + j;
+                        }
+                    }
+                }
+                if(minx != -1 && miny != -1) {
+                    mortaratk(minx, miny);
+                    energy -= 5;
+                    energyupd();
+                }
+            }
+
+            function mortaratk(x, y) {
+                for(let i = -mortarexplode; i <= mortarexplode; i++) {
+                    if(x + i < 0 || x + i > 79) continue;
+                    for(let j = -mortarexplode; j <= mortarexplode; j++) {
+                        if(y + j < 0 || y + j > 159) continue;
+                        if(i * i + j * j <= mortarexplode * mortarexplode) {
+                            density[(x + i) * 160 + (y + j)] -= mortarfire;
+                            if(density[(x + i) * 160 + (y + j)] < 0) density[(x + i) * 160 + (y + j)] = 0.0;
+                        }
+                    }
+                }
+                show();
+            }
+
+            function nullifiercountdown(k, t) {
+                if(t == 0) {
+                    nullifieratk(k);
+                    return;
+                }
+                nullifier[k].innerHTML = t;
+                setTimeout(nullifiercountdown, 1000, k, t - 1);
+            }
+
+            function nullifieratk(k) {
+                let x = nullifierx[k], y = nullifiery[k];
+                for(let l = 0; l < enemy.length; l++) {
+                    let ex = enemyx[l], ey = enemyy[l];
+                    let i = ex - x, j = ey - y;
+                    if(i * i + j * j <= nullifierrange * nullifierrange) {
+                        destroyenemy(l);
+                    }
+                }
+                destroynullifier(k);
+            }
+            /********动画部分********/
+            const drawnumber = 10;
+            function blasterdraw(fx, fy, tx, ty) {
+                let k = 0;
+                while(blasterdrawline[k * drawnumber] != null) k++;
+                let disx = (tx - fx) / drawnumber, disy = (ty - fy) / drawnumber;
+                for(let i = 0; i < drawnumber; i++) {
+                    blasterdrawline[k * drawnumber + i] = document.createElement("div");
+                    document.getElementById("Back").appendChild(blasterdrawline[k * drawnumber + i]);
+                    blasterdrawline[k * drawnumber + i].className = "blasterdraw";
+                    blasterdrawline[k * drawnumber + i].style.top = (fx + disx * (i + 1)) * 10 + 4 + "px";
+                    blasterdrawline[k * drawnumber + i].style.left = (fy + disy * (i + 1)) * 10 + 4 + "px";
+                }
+                setTimeout(blastererase, 10, k);
+            }
+
+            function blastererase(k) {
+                /*var templine;
+                if(k != blasterdrawtop) for(var i = 0; i < 10; i++) {
+                    templine = blasterdrawline[k * 10 + i];
+                    blasterdrawline[k * 10 + i] = blasterdrawline[blasterdrawtop * 10 + i];
+                    blasterdrawline[blasterdrawtop * 10 + i] = templine;
+                }*/
+                for(let i = 0; i < drawnumber; i++) {
+                    document.getElementById("Back").removeChild(blasterdrawline[k * drawnumber + i]);
+                    blasterdrawline[k * drawnumber + i] = null;
+                }
+                //blasterdrawtop--;
+            }
+        </script>
+        <style>
+            div.base {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: cornflowerblue;
+                z-index: 20;
+            }
+            div.enemy {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: grey;
+                z-index: 10;
+            }
+            div.ground {
+                height: 10px;
+                width: 10px;
+                position: absolute;
+                background-color: #544;
+                z-index: 15;
+            }
+            div.blaster {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: mediumseagreen;
+                z-index: 20;
+            }
+            div.blasterdraw {
+                height: 2px;
+                width: 2px;
+                border-radius: 5px;
+                position: absolute;
+                background-color: firebrick;
+                z-index: 30;
+            }
+            div.mortar {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: lightcoral;
+                z-index: 20;
+            }
+            div.nullifier {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: maroon;
+                color: whitesmoke;
+                z-index: 20;
+                font-size: 25px;
+                text-align: center;
+            }
+            div.reactor {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: aquamarine;
+                z-index: 20;
+            }
+            div.storage {
+                height: 30px;
+                width: 30px;
+                border-radius: 10px;
+                position: absolute;
+                background-color: limegreen;
+                z-index: 20;
+            }
+        </style>
+    </head>
+    <body>
+        <div id = "Back" style = "position: absolute; height: 800px; width: 1600px; z-index: 0; background-color: antiquewhite; border-width: 2px; border-style: solid; border-color: darkgoldenrod;">
+            <div id = "StartDiv" style = "position: absolute; left: 600px; top: 300px; width: 400px; height: 50px; font-size: 20px; z-index: 100; text-align: center;">你是实验室里被研发出来的一种能够治理污染的植物，快使用你的能量清除那个污染源！</div>
+            <div id = "VictoryDiv" style = "position: absolute; left: 625px; top: 300px; width: 350px; height: 50px; font-size: 20px; z-index: 100; visibility: hidden; text-align: center;">污染源全部被清理完毕，战斗胜利！</div>
+            <button id = "StartButton" onclick = "start();" style = "position: absolute; left: 750px; top: 375px; width: 100px; height: 50px; z-index: 100;">开始游戏</button>
+            <div id = "cursor" style="position: absolute; height: 30px; width: 30px; border: brown; border-width: 3px; border-style: solid; top: 0px; left: 0px; z-index: 30; visibility: hidden;"></div>
+        </div>
+        <div style = "position: absolute; top: 820px;">
+            <div id = "pdensity" style = "font-size: 20px;">浓度: </div>
+            <div id = "penergy" style = "font-size: 20px; width: 500px; background-color: honeydew; border-width: 3px; border-style: solid;">
+                <div id = "penergyfill" style = "width: 0px; background-color: lawngreen; white-space: nowrap;">能量: </div>
+            </div>
+            <div id = "penergydelta" style = "font-size: 20px; white-space: nowrap;">速度：</div>
+            <button id = "BuildButton" onclick="cancelselect(); state = 'buildreactor';// document.getElementById('cursor').style.visibility = 'visible';" style="font-size: 20px;">建造能量反应堆(-5)</button>
+            <button id = "BuildButton" onclick="cancelselect(); state = 'buildstorage';// document.getElementById('cursor').style.visibility = 'visible';" style="font-size: 20px;">建造能量仓库(-10)</button>
+            <button id = "BuildButton" onclick="cancelselect(); state = 'buildblaster';// document.getElementById('cursor').style.visibility = 'visible';" style="font-size: 20px;">建造吸收激光(-25)</button>
+            <button id = "BuildButton" onclick="cancelselect(); state = 'buildmortar';// document.getElementById('cursor').style.visibility = 'visible';" style="font-size: 20px;">建造吸收大炮(-50)</button>
+            <button id = "BuildButton" onclick="cancelselect(); state = 'buildnullifier';// document.getElementById('cursor').style.visibility = 'visible';" style="font-size: 20px;">建造污染源炸弹(-100)</button>
+            <button id = "CancelButton" onclick="cancelselect(); state = 'select';// document.getElementById('cursor').style.visibility = 'hidden';" style="font-size: 20px;">取消</button>
+            <button id = "HideButton" onclick="anim = 'hide';" style="font-size: 20px;">停用动画</button>
+            <button id = "ShowButton" onclick="anim = 'show';" style="font-size: 20px;">启用动画</button>
+        </div>
+    </body>
+</html>

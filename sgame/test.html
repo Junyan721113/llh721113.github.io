@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TestWebsite</title>
+    </head>
+    <body>
+        <h1>Test_Title</h1>
+        <p>11111<br></p>
+        <form name="f_main">文本长度：<input type="text" name="len_input"><br></form>
+        <button onclick="randomString();">Start</button>
+        <h1 id="p1">123<br></h1>
+        <script>
+            //randomString();
+            function randomString() {
+                vars = 0;
+                var len = parseInt(document.f_main.len_input.value);
+                var s = "";
+                for (var i = 0; i < len; i++) {
+                    var x = Math.floor(Math.random() * 10 + 48);
+                    s = s + x;
+                    visualizeString(s);
+                }
+            }
+            function visualizeString(str) {
+                var ads = document.getElementById("p1");
+                ads.innerHTML = str;
+            }
+        </script>
+    </body>
+</html>
