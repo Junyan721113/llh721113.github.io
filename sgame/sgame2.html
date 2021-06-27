@@ -10,11 +10,13 @@ body
 }
 </style>
 	<script type="text/javascript">
+	const framefix = 0.5;
 	var started=0;
 	var num=20;
 	var bll=new Array();
 	var blr=new Array();
-	var speed=2;
+	var setspeed = 2;
+	var speed=setspeed*framefix;
 	var dir=Math.PI*3/4;
 	var bx=300;
 	var by=430;
@@ -30,7 +32,7 @@ body
 	{
 		if(!(by+10>=450 && by+10<=475 && bx+20>=kl && bx+10<=kl+5) && !(by+10>=450 && by+10<=475 && bx<=kl+200 && bx>=kl+200-5))
 		{
-			kl=getmouseleft()-100-200;
+			kl=getmouseleft()-100-20;
 			document.getElementById("blank").style.left=kl+"px";
 		}
 		if(started==0)
@@ -223,6 +225,7 @@ body
 	}
 	function start()
 	{
+		speed=setspeed*framefix;
 		speedx=Math.cos(dir)*speed;
 		speedy=Math.sin(dir)*speed;
 		document.getElementById("sc").style.visibility="visible";
@@ -234,24 +237,24 @@ body
 		document.getElementById("nu").style.visibility="hidden";
 		document.getElementById("n-").style.visibility="hidden";
 		started=1;
-		flyint=setInterval("fly();",10);
+		flyint=setInterval("fly();",10 * framefix);
 		create();
 		return;
 	}//position: absolute很重要！！！
 </script>
 </head>
 <body>
-	<div id="bg" onmousemove="move();" style="position: absolute; top: 100px; left: 200px; height: 500px; width: 800px; background: #FFFF88">
+	<div id="bg" onmousemove="move();" style="position: absolute; top: 10px; left: 20px; height: 500px; width: 800px; background: #FFFF88">
 		<div id="blank" style="position: absolute; top: 450px; left: 250px; height: 25px; width: 200px; background: #880000">
 		</div>
 		<button id="bstart" onclick="start();" style="position: absolute; top: 50px; left: 250px; height: 100px; width: 300px; text-align:center; font-size: 30px; border-radius: 25px; background: #888888";>开始游戏！
 		</button>
 		<p id="sc" style="position: absolute; top: -50px; left: 10px; font-size: 50px; visibility: hidden; user-select: none;">0</p>
-		<button id="b-" onclick="speed--;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 250px; top: 200px; width: 100px; height: 50px; background: #CFF;">减慢速度</button>
-		<p id="sp" style="position: absolute; left: 385px; top: 140px; font-size: 50px;">2</p>
-		<button id="b+" onclick="speed++;document.getElementById('sp').innerHTML=speed;" style="position: absolute; left: 450px; top: 200px; width: 100px; height: 50px; background: #CFF;">增加速度</button>
+		<button id="b-" onclick="setspeed--;document.getElementById('sp').innerHTML=setspeed;" style="position: absolute; left: 250px; top: 200px; width: 100px; height: 50px; background: #CFF;">减慢速度</button>
+		<p id="sp" style="position: absolute; left: 350px; top: 140px; font-size: 50px; width: 100px; text-align: center">2</p>
+		<button id="b+" onclick="setspeed++;document.getElementById('sp').innerHTML=setspeed;" style="position: absolute; left: 450px; top: 200px; width: 100px; height: 50px; background: #CFF;">增加速度</button>
 		<button id="n-" onclick="num--;document.getElementById('nu').innerHTML=num;" style="position: absolute; left: 250px; top: 280px; width: 100px; height: 50px; background: #CFF;">减少方块数量</button>
-		<p id="nu" style="position: absolute; left: 370px; top: 220px; font-size: 50px;">20</p>
+		<p id="nu" style="position: absolute; left: 350px; top: 220px; font-size: 50px; width: 100px; text-align: center">20</p>
 		<button id="n+" onclick="num++;document.getElementById('nu').innerHTML=num;" style="position: absolute; left: 450px; top: 280px; width: 100px; height: 50px; background: #CFF;">增加方块数量</button>
 		<div id="ball" style="position: absolute; top: 430px; left: 300px; width: 20px; height: 20px; border-radius: 20px; background: blue;"></div>
 		</div>
