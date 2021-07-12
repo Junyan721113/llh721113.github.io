@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta charset = utf-8>
+        <title>飞船控制</title>
+        <style>
+            div.ship {
+                position: absolute;
+                background-color: black;
+                width: 200px;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body id = "bg">
+        <script>
+            /* 1m = 10px */
+            const dt = 10;
+            var ship = new Array();
+            var shipnum = 0;
+            ship[shipnum] = document.createElement("div");
+            ship[shipnum].className = "ship";
+            document.getElementById("bg").appendChild(ship[shipnum]);
+            shipnum++;
+            var shipspeedx = new Array(), shipspeedy = new Array(), shiprotate = new Array();
+            var shipx = new Array(), shipy = new Array(), shipr = new Array();
+            var shipweight = new Array();
+            shipspeedx[0] = 0; shipx[0] = 0;
+            shipspeedy[0] = 0; shipy[0] = 0;
+            shiprotate[0] = 0; shipr[0] = 0;
+            shipweight[0] = 20;
+            setInterval(fly, dt);
+            function fly() {
+                shipx[0] += shipspeedx[0];
+                shipy[0] += shipspeedy[0];
+                shipr[0] += shiprotate[0];
+                let r = shipr[0];
+                ship[0].style.transform = "matrix(" + Math.cos(r) + ", " + -Math.sin(r) + ", " + Math.sin(r) + ", " + Math.cos(r) + ", " + shipx[0] +", " + shipy[0] + ")";
+            }
+        </script>
+    </body>
+</html>
